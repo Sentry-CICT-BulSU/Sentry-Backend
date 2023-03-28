@@ -22,6 +22,10 @@ class AuthenticationController
 
         return Route::dispatch($proxy);
     }
+    public function view()
+    {
+        return view('auth.login');
+    }
     public function login(LoginRequest $request)
     {
         $request->authenticate();
@@ -32,12 +36,13 @@ class AuthenticationController
                 'message' => 'Unauthorized',
             ], 401);
         }
-        return response()->json([
-            'message' => 'You are logged in',
-            'user' => $request->user(),
-            'token' => $token,
-            'laravel_token' => $request->user()->laravel_token
-        ]);
+        // return response()->json([
+        //     'message' => 'You are logged in',
+        //     'user' => $request->user(),
+        //     'token' => $token,
+        //     'laravel_token' => $request->user()->laravel_token
+        // ]);
+        return redirect()->intended();
     }
 
     public function logout(Request $request)

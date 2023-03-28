@@ -2,21 +2,13 @@
 
 namespace App\Providers;
 
-use App\Models\{
-    AuthCode,
-    Client,
-    PersonalAccessClient,
-    RefreshToken,
-    Token
-};
-// use Illuminate\Support\Facades\Gate;
+use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-use Laravel\Passport\Passport;
 
 class AuthServiceProvider extends ServiceProvider
 {
     /**
-     * The model to policy mappings for the application.
+     * The policy mappings for the application.
      *
      * @var array<class-string, class-string>
      */
@@ -30,16 +22,11 @@ class AuthServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->registerPolicies();
-        // Passport::hashClientSecrets();
 
-        Passport::tokensExpireIn(now()->addHours(24));
-        Passport::refreshTokensExpireIn(now()->addDays(30));
-        Passport::personalAccessTokensExpireIn(now()->addDays(30));
+        ResetPassword::createUrlUsing(function (object $notifiable, string $token) {
+            return config('app.frontend_url')."/password-reset/$token?email={$notifiable->getEmailForPasswordReset()}";
+        });
 
-        Passport::useTokenModel(Token::class);
-        Passport::useRefreshTokenModel(RefreshToken::class);
-        Passport::useAuthCodeModel(AuthCode::class);
-        Passport::useClientModel(Client::class);
-        Passport::usePersonalAccessClientModel(PersonalAccessClient::class);
+        //
     }
 }

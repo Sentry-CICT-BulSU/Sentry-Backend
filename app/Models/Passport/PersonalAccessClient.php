@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Passport;
 
 class PersonalAccessClient extends \Laravel\Passport\PersonalAccessClient
 {

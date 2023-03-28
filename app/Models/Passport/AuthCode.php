@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Passport;
 
 class AuthCode extends \Laravel\Passport\AuthCode
 {

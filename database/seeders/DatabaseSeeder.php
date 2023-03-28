@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Rhon Stratos',
             'email' => 'rhondytioco@gmail.com',
             'password' => Hash::make('admin'),
+            'type' => \App\Models\User::TYPES['admin'],
         ]);
     }
 }
