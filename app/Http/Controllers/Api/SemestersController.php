@@ -45,19 +45,22 @@ class SemestersController extends Controller
             ], 500);
         }
     }
-    public function show(Semesters $semesters)
+    public function show(Semesters $semester)
+    {
+        return response()->json([
+            'message' => 'Semester retrieved successfully',
+            'semester' => $semester
+        ], 200);
+    }
+    public function edit(Semesters $semester)
     {
         //
     }
-    public function edit(Semesters $semesters)
+    public function update(UpdateSemestersRequest $request, Semesters $semester)
     {
         //
     }
-    public function update(UpdateSemestersRequest $request, Semesters $semesters)
-    {
-        //
-    }
-    public function destroy(Semesters $semesters)
+    public function destroy(Semesters $semester)
     {
         //
     }
