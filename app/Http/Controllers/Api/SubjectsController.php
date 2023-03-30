@@ -69,10 +69,19 @@ class SubjectsController extends Controller
     }
     public function destroy(Subjects $subject): JsonResponse
     {
-        //
+        return response()->json([
+            'message' => 'The subject has already been soft deleted',
+            'deleted' => $subject->delete()
+        ], 200);
     }
     public function restore($subject): JsonResponse
     {
-        //
+        $restore = Subjects::withTrashed()->find($subject);
+        return $restore->trashed()
+            ? response()->json([
+                'message' => 'Subject restored successfully',
+                'restore' => $restore->restore()
+            ], 200)
+            : abort(403, 'The subject has already been restored');
     }
 }
