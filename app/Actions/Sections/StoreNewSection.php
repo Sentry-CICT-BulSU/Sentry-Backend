@@ -2,7 +2,7 @@
 
 namespace App\Actions\Sections;
 
-use App\Http\Requests\StoreSectionsRequest;
+use App\Http\Requests\Api\Sections\StoreSectionsRequest;
 use App\Models\Sections;
 use Illuminate\Support\Arr;
 

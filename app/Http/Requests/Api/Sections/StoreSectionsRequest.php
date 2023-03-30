@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Api\Sections;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateSectionsRequest extends FormRequest
+class StoreSectionsRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,10 @@ class UpdateSectionsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'semester_id' => ['required', 'string'],
+            'name' => ['required', 'string', 'max:255'],
+            'status' => ['required', 'string', 'max:255'],
+            'faculty_adviser' => ['required', 'exists:users,id'],
         ];
     }
 }
