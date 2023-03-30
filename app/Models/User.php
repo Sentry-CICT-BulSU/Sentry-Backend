@@ -14,15 +14,15 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
 
     public const TYPES = [
-        'faculty' => 0,
-        'admin' => 1,
-        'attendance_checker' => 2
+        'faculty' => '0',
+        'admin' => '1',
+        'attendance_checker' => '2'
     ];
 
     public const TYPE_CAST = [
-        0 => 'Faculty',
-        1 => 'Admin',
-        2 => 'Attendance Checker'
+        '0' => 'Faculty',
+        '1' => 'Admin',
+        '2' => 'Attendance Checker'
     ];
 
     /**

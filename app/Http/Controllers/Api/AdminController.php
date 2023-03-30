@@ -12,6 +12,10 @@ use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('admin');
+    }
     /**
      * Store a newly created resource in storage.
      */
