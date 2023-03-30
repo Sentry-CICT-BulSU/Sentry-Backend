@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Api\{
+    AdminController,
+};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,4 +23,6 @@ Route::middleware(['auth:api'])->group(function () {
         // 'types' => $request->user()::TYPES,
         'cast' => $request->user()::TYPE_CAST
     ]);
+
+    Route::resource('admin', AdminController::class)->except(['index', 'edit']);
 });
