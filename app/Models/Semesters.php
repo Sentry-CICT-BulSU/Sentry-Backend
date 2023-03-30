@@ -20,6 +20,11 @@ class Semesters extends Model
         // 'duration' => 'array'
     ];
 
+    public function sections()
+    {
+        return $this->hasMany(Sections::class);
+    }
+
     public function getStatusAttribute($status)
     {
         return Str::title($status);

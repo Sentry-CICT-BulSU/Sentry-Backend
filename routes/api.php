@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\{
     AdminController,
     SemestersController
 };
+use App\Http\Controllers\Api\SectionsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -26,9 +27,19 @@ Route::middleware(['auth:api'])->group(function () {
     ]);
 
     Route::prefix('admin')->name('admin.')->group(function () {
-        Route::post('users/{user}/restore', [AdminController::class, 'restore'])->name('users.restore');
-        Route::resource('users', AdminController::class)->except(['index', 'edit']);
-        Route::post('semesters/{semester}/restore', [SemestersController::class, 'restore'])->name('semesters.restore');
-        Route::resource('semesters', SemestersController::class)->except(['edit']);
+        Route::controller(AdminController::class)->group(function () {
+            Route::post('users/{user}/restore', 'restore')->name('users.restore');
+            Route::resource('users', AdminController::class)->except(['index', 'edit']);
+        });
+
+        Route::controller(SemestersController::class)->group(function () {
+            Route::post('semesters/{semester}/restore', 'restore')->name('semesters.restore');
+            Route::resource('semesters', SemestersController::class)->except(['edit']);
+        });
+
+        Route::controller(SectionsController::class)->group(function () {
+            Route::post('sections/{section}/restore', 'restore')->name('sections.restore');
+            Route::resource('sections', SectionsController::class)->except(['edit']);
+        });
     });
 });
