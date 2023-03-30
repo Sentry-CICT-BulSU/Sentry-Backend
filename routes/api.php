@@ -25,4 +25,5 @@ Route::middleware(['auth:api'])->group(function () {
     ]);
 
     Route::resource('admin/users', AdminController::class)->except(['index', 'edit']);
+    Route::post('admin/users/{user}/restore', [AdminController::class, 'restore']);
 });

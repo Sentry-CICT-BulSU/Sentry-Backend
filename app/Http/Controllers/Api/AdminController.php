@@ -92,11 +92,12 @@ class AdminController extends Controller
         ], 200);
     }
 
-    public function restore(User $user)
+    public function restore($user)
     {
+        $restore = User::withTrashed()->find($user);
         return response()->json([
             'message' => 'User restored successfully',
-            'restore' => $user->restore()
+            'restore' => $restore->restore()
         ], 200);
     }
 }
