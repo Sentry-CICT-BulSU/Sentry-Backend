@@ -72,14 +72,19 @@ class SemestersController extends Controller
     }
     public function destroy(Semesters $semester)
     {
-        //
+        return response()->json([
+            'message' => 'The semester has already been soft deleted',
+            'deleted' => $semester->delete()
+        ], 200);
     }
     public function restore($semester)
     {
         $restore = Semesters::withTrashed()->find($semester);
-        return response()->json([
-            'message' => 'Semester restored successfully',
-            'restore' => $restore->restore()
-        ], 200);
+        return $restore->trashed()
+            ? response()->json([
+                'message' => 'Semester restored successfully',
+                'restore' => $restore->restore()
+            ], 200)
+            : abort(403, 'The semester has already been restored');
     }
 }

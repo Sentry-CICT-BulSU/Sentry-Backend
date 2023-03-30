@@ -86,18 +86,22 @@ class AdminController extends Controller
      */
     public function destroy(User $user)
     {
-        return response()->json([
-            'message' => 'User deleted successfully',
-            'deleted' => $user->delete()
-        ], 200);
+        return !$user->trashed()
+            ? response()->json([
+                'message' => 'User deleted successfully',
+                'deleted' => $user->delete()
+            ], 200)
+            : abort(403, 'The user has already been soft deleted');
     }
 
     public function restore($user)
     {
         $restore = User::withTrashed()->find($user);
-        return response()->json([
-            'message' => 'User restored successfully',
-            'restore' => $restore->restore()
-        ], 200);
+        return $restore->trashed()
+            ? response()->json([
+                'message' => 'User restored successfully',
+                'restore' => $restore->restore()
+            ], 200)
+            : abort(403, 'The user has already been restored');
     }
 }
