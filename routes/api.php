@@ -29,6 +29,6 @@ Route::middleware(['auth:api'])->group(function () {
         Route::post('users/{user}/restore', [AdminController::class, 'restore'])->name('users.restore');
         Route::resource('users', AdminController::class)->except(['index', 'edit']);
         Route::post('semesters/{semester}/restore', [SemestersController::class, 'restore'])->name('semesters.restore');
-        Route::resource('semesters', SemestersController::class);
+        Route::resource('semesters', SemestersController::class)->except(['edit']);
     });
 });

@@ -52,13 +52,23 @@ class SemestersController extends Controller
             'semester' => $semester
         ], 200);
     }
-    public function edit(Semesters $semester)
-    {
-        //
-    }
     public function update(UpdateSemestersRequest $request, Semesters $semester)
     {
-        //
+        try {
+            DB::beginTransaction();
+            $semester->update($request->validated());
+            DB::commit();
+            return response()->json([
+                'message' => 'Semester updated successfully',
+                'semester' => $semester
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'message' => 'Semester update failed',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
     public function destroy(Semesters $semester)
     {

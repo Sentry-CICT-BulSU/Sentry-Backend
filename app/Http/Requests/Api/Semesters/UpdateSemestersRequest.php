@@ -11,7 +11,7 @@ class UpdateSemestersRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,11 @@ class UpdateSemestersRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => ['nullable', 'bail', 'string', 'max:255'],
+            'academic_year' => ['nullable', 'bail', 'string', 'max:255'],
+            'duration' => ['nullable', 'bail', 'array', 'max:255'],
+            'duration.*' => ['required_with:duration', 'string', 'max:255'],
+            'status' => ['nullable', 'bail', 'string', 'max:255'],
         ];
     }
 }
