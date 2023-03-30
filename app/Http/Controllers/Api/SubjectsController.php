@@ -14,6 +14,10 @@ use Illuminate\Support\Facades\DB;
 
 class SubjectsController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('admin');
+    }
     public function index(): JsonResponse
     {
         // $subjects = Subjects::paginate(15);

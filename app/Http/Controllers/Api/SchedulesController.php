@@ -14,6 +14,10 @@ use Illuminate\Support\Facades\DB;
 
 class SchedulesController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('admin');
+    }
     public function index(): JsonResponse
     {
         // $schedule = Schedules::paginate(15);
