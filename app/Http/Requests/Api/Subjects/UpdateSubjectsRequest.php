@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Api\Subjects;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreSubjectsRequest extends FormRequest
+class UpdateSubjectsRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,10 +22,9 @@ class StoreSubjectsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['required', 'string', 'max:255', 'unique:subjects,title'],
-            'code' => ['required', 'string', 'max:255', 'unique:subjects,code'],
-            'status' => ['required', 'string', 'max:255'],
-            'section_id' => ['required', 'string', 'max:255', 'exists:sections,id'],
+            'title' => ['nullable', 'bail', 'string', 'max:255', 'unique:subjects,title'],
+            'code' => ['nullable', 'bail', 'string', 'max:255', 'unique:subjects,code'],
+            'status' => ['nullable', 'bail', 'string', 'max:255'],
         ];
     }
 }

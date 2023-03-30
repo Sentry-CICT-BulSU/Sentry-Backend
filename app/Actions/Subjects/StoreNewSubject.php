@@ -2,7 +2,7 @@
 
 namespace App\Actions\Subjects;
 
-use App\Http\Requests\StoreSubjectsRequest;
+use App\Http\Requests\Api\Subjects\StoreSubjectsRequest;
 use App\Models\Subjects;
 
 class StoreNewSubject

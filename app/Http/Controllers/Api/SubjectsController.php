@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Actions\Subjects\StoreNewSubject;
 use App\Http\Controllers\Controller;
 use App\Models\Subjects;
-use App\Http\Requests\StoreSubjectsRequest;
-use App\Http\Requests\UpdateSubjectsRequest;
+use App\Http\Requests\Api\Subjects\{
+    StoreSubjectsRequest,
+    UpdateSubjectsRequest
+};
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 
@@ -49,7 +51,21 @@ class SubjectsController extends Controller
     }
     public function update(UpdateSubjectsRequest $request, Subjects $subject): JsonResponse
     {
-        //
+        try {
+            DB::beginTransaction();
+            $subject->update($request->validated());
+            DB::commit();
+            return response()->json([
+                'message' => 'Subject updated successfully',
+                'subject' => $subject
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'message' => 'Subject update failed',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
     public function destroy(Subjects $subject): JsonResponse
     {
