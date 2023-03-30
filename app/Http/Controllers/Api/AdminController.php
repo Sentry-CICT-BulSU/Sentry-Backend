@@ -31,7 +31,7 @@ class AdminController extends Controller
             DB::commit();
             return response()->json([
                 'message' => $request->type . ' created successfully',
-                'faculty' => $faculty
+                $faculty->type => $faculty
             ], 200);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -86,6 +86,17 @@ class AdminController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        return response()->json([
+            'message' => 'User deleted successfully',
+            'deleted' => $user->delete()
+        ], 200);
+    }
+
+    public function restore(User $user)
+    {
+        return response()->json([
+            'message' => 'User restored successfully',
+            'restore' => $user->restore()
+        ], 200);
     }
 }
