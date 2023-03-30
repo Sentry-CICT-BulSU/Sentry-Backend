@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\{
     AdminController,
+    SemestersController
 };
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +25,10 @@ Route::middleware(['auth:api'])->group(function () {
         'cast' => $request->user()::TYPE_CAST
     ]);
 
-    Route::resource('admin/users', AdminController::class)->except(['index', 'edit']);
-    Route::post('admin/users/{user}/restore', [AdminController::class, 'restore']);
+    Route::prefix('admin')->name('admin.')->group(function () {
+        Route::post('users/{user}/restore', [AdminController::class, 'restore'])->name('users.restore');
+        Route::resource('users', AdminController::class)->except(['index', 'edit']);
+        Route::post('semesters/{semester}/restore', [SemestersController::class, 'restore'])->name('semesters.restore');
+        Route::resource('semesters', SemestersController::class);
+    });
 });
