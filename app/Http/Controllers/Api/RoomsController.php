@@ -16,7 +16,12 @@ class RoomsController extends Controller
 {
     public function index(): JsonResponse
     {
-        //
+        // $rooms = Rooms::all(15);
+        $rooms = Rooms::all();
+        return response()->json([
+            'message' => 'Rooms retrieved successfully',
+            'rooms' => $rooms,
+        ], 200);
     }
     public function store(
         StoreRoomsRequest $request,
