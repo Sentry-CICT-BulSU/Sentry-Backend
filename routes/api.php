@@ -24,5 +24,5 @@ Route::middleware(['auth:api'])->group(function () {
         'cast' => $request->user()::TYPE_CAST
     ]);
 
-    Route::resource('admin', AdminController::class)->except(['index', 'edit']);
+    Route::resource('admin/users', AdminController::class)->except(['index', 'edit']);
 });

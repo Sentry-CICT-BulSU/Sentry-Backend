@@ -33,10 +33,6 @@ class RegisterRequest extends FormRequest
 
     public function saveNewUser()
     {
-        return User::create([
-            'name' => $this->name,
-            'email' => $this->email,
-            'password' => Hash::make($this->password),
-        ]);
+        return User::create($this->validated());
     }
 }
