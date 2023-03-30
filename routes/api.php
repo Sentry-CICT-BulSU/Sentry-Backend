@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\{
     SemestersController
 };
 use App\Http\Controllers\Api\SectionsController;
+use App\Http\Controllers\Api\SubjectsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -40,6 +41,11 @@ Route::middleware(['auth:api'])->group(function () {
         Route::controller(SectionsController::class)->group(function () {
             Route::post('sections/{section}/restore', 'restore')->name('sections.restore');
             Route::resource('sections', SectionsController::class)->except(['edit']);
+        });
+
+        Route::controller(SubjectsController::class)->group(function () {
+            Route::post('subjects/{section}/restore', 'restore')->name('subjects.restore');
+            Route::resource('subjects', SubjectsController::class)->except(['edit']);
         });
     });
 });
