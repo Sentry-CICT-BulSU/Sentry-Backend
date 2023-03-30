@@ -9,6 +9,7 @@ use App\Http\Requests\Api\Semesters\{
     StoreSemestersRequest,
     UpdateSemestersRequest
 };
+use Illuminate\Http\JsonResponse;
 use \Illuminate\Support\Facades\DB;
 
 class SemestersController extends Controller
@@ -17,7 +18,7 @@ class SemestersController extends Controller
     {
         $this->middleware('admin');
     }
-    public function index()
+    public function index(): JsonResponse
     {
         // $semesters = Semesters::paginate(15);
         $semesters = Semesters::all();
@@ -27,8 +28,10 @@ class SemestersController extends Controller
         ], 200);
     }
 
-    public function store(StoreSemestersRequest $request, StoreNewSemester $storeNewSemester)
-    {
+    public function store(
+        StoreSemestersRequest $request,
+        StoreNewSemester $storeNewSemester
+    ): JsonResponse {
         try {
             DB::beginTransaction();
             $semester = $storeNewSemester->handle($request);
@@ -45,15 +48,17 @@ class SemestersController extends Controller
             ], 500);
         }
     }
-    public function show(Semesters $semester)
+    public function show(Semesters $semester): JsonResponse
     {
         return response()->json([
             'message' => 'Semester retrieved successfully',
             'semester' => $semester
         ], 200);
     }
-    public function update(UpdateSemestersRequest $request, Semesters $semester)
-    {
+    public function update(
+        UpdateSemestersRequest $request,
+        Semesters $semester
+    ): JsonResponse {
         try {
             DB::beginTransaction();
             $semester->update($request->validated());
@@ -70,14 +75,14 @@ class SemestersController extends Controller
             ], 500);
         }
     }
-    public function destroy(Semesters $semester)
+    public function destroy(Semesters $semester): JsonResponse
     {
         return response()->json([
             'message' => 'The semester has already been soft deleted',
             'deleted' => $semester->delete()
         ], 200);
     }
-    public function restore($semester)
+    public function restore($semester): JsonResponse
     {
         $restore = Semesters::withTrashed()->find($semester);
         return $restore->trashed()

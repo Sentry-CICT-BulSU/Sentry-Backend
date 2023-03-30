@@ -9,12 +9,13 @@ use App\Http\Requests\Api\Sections\{
     StoreSectionsRequest,
     UpdateSectionsRequest
 };
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 
 class SectionsController extends Controller
 {
-    public function index()
+    public function index(): JsonResponse
     {
         // $sections = Sections::paginate(15);
         $sections = Sections::all();
@@ -23,8 +24,10 @@ class SectionsController extends Controller
             'sections' => $sections
         ], 200);
     }
-    public function store(StoreSectionsRequest $request, StoreNewSection $storeNewSection)
-    {
+    public function store(
+        StoreSectionsRequest $request,
+        StoreNewSection $storeNewSection
+    ): JsonResponse {
         try {
             DB::beginTransaction();
             $section = $storeNewSection->handle($request);
@@ -41,15 +44,17 @@ class SectionsController extends Controller
             ], 500);
         }
     }
-    public function show(Sections $section)
+    public function show(Sections $section): JsonResponse
     {
         return response()->json([
             'message' => 'Section retrieved successfully',
             'section' => $section
         ], 200);
     }
-    public function update(UpdateSectionsRequest $request, Sections $section)
-    {
+    public function update(
+        UpdateSectionsRequest $request,
+        Sections $section
+    ): JsonResponse {
         try {
             DB::beginTransaction();
             $data = $request->validated();
@@ -68,7 +73,7 @@ class SectionsController extends Controller
             ], 500);
         }
     }
-    public function destroy(Sections $section)
+    public function destroy(Sections $section): JsonResponse
     {
         return !$section->trashed()
             ? response()->json([
@@ -78,7 +83,7 @@ class SectionsController extends Controller
             : abort(403, 'The section has already been soft deleted');
     }
 
-    public function restore($section)
+    public function restore($section): JsonResponse
     {
         $restore = Sections::withTrashed()->find($section);
         return $restore->trashed()

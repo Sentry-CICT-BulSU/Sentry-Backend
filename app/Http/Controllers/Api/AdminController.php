@@ -46,7 +46,7 @@ class AdminController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(User $user)
+    public function show(User $user): JsonResponse
     {
         return response()->json([
             'user' => $user
@@ -59,7 +59,7 @@ class AdminController extends Controller
     public function update(
         UpdateUser $request,
         User $user
-    ) {
+    ): JsonResponse {
         try {
             DB::beginTransaction();
             $user->update(
@@ -84,7 +84,7 @@ class AdminController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy(User $user): JsonResponse
     {
         return !$user->trashed()
             ? response()->json([
@@ -94,7 +94,7 @@ class AdminController extends Controller
             : abort(403, 'The user has already been soft deleted');
     }
 
-    public function restore($user)
+    public function restore($user): JsonResponse
     {
         $restore = User::withTrashed()->find($user);
         return $restore->trashed()
