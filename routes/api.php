@@ -4,6 +4,8 @@ use App\Http\Controllers\Api\{
     AdminController,
     SemestersController
 };
+use App\Http\Controllers\Api\RoomsController;
+use App\Http\Controllers\Api\SchedulesController;
 use App\Http\Controllers\Api\SectionsController;
 use App\Http\Controllers\Api\SubjectsController;
 use Illuminate\Http\Request;
@@ -30,22 +32,32 @@ Route::middleware(['auth:api'])->group(function () {
     Route::prefix('admin')->name('admin.')->group(function () {
         Route::controller(AdminController::class)->group(function () {
             Route::post('users/{user}/restore', 'restore')->name('users.restore');
-            Route::resource('users', AdminController::class)->except(['index', 'edit']);
+            Route::resource('users', AdminController::class)->except(['index', 'create', 'edit']);
         });
 
         Route::controller(SemestersController::class)->group(function () {
             Route::post('semesters/{semester}/restore', 'restore')->name('semesters.restore');
-            Route::resource('semesters', SemestersController::class)->except(['edit']);
+            Route::resource('semesters', SemestersController::class)->except(['create', 'edit']);
         });
 
         Route::controller(SectionsController::class)->group(function () {
             Route::post('sections/{section}/restore', 'restore')->name('sections.restore');
-            Route::resource('sections', SectionsController::class)->except(['edit']);
+            Route::resource('sections', SectionsController::class)->except(['create', 'edit']);
         });
 
         Route::controller(SubjectsController::class)->group(function () {
             Route::post('subjects/{section}/restore', 'restore')->name('subjects.restore');
-            Route::resource('subjects', SubjectsController::class)->except(['edit']);
+            Route::resource('subjects', SubjectsController::class)->except(['create', 'edit']);
+        });
+
+        Route::controller(RoomsController::class)->group(function () {
+            Route::post('rooms/{room}/restore', 'restore')->name('rooms.restore');
+            Route::resource('rooms', RoomsController::class)->except(['create', 'edit']);
+        });
+
+        Route::controller(SchedulesController::class)->group(function () {
+            Route::post('schedules/{schedule}/restore', 'restore')->name('schedules.restore');
+            Route::resource('schedules', SchedulesController::class)->except(['create', 'edit']);
         });
     });
 });

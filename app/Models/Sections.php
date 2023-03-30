@@ -29,6 +29,10 @@ class Sections extends Model
     {
         return $this->hasMany(Subjects::class);
     }
+    public function schedule()
+    {
+        return $this->hasOne(Schedules::class);
+    }
 
     public function getStatusAttribute($status)
     {
