@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Inertia\Response;
+use Laravel\Passport\RefreshTokenRepository;
+use Laravel\Passport\TokenRepository;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -38,8 +40,18 @@ class AuthenticatedSessionController extends Controller
     /**
      * Destroy an authenticated session.
      */
-    public function destroy(Request $request): RedirectResponse
-    {
+    public function destroy(
+        Request $request,
+        TokenRepository $tokenRepository,
+        RefreshTokenRepository $refreshTokenRepository
+    ): RedirectResponse {
+        foreach (Auth::guard('web')->user()->tokens->pluck('id') as $tokenId) {
+            // // Revoke an access token...
+            $tokenRepository->revokeAccessToken($tokenId);
+
+            // // Revoke all of the token's refresh tokens...
+            $refreshTokenRepository->revokeRefreshTokensByAccessTokenId($tokenId);
+        }
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();

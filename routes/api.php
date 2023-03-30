@@ -14,6 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware(['auth:api'])->group(function () {
+    Route::get('/user', fn(Request $request) => $request->user());
+    Route::get('/user/types', fn(Request $request) => [
+        // 'types' => $request->user()::TYPES,
+        'cast' => $request->user()::TYPE_CAST
+    ]);
 });
