@@ -70,10 +70,22 @@ class SectionsController extends Controller
     }
     public function destroy(Sections $section)
     {
-        //
+        return !$section->trashed()
+            ? response()->json([
+                'message' => 'Section deleted successfully',
+                'deleted' => $section->delete()
+            ], 200)
+            : abort(403, 'The section has already been soft deleted');
     }
+
     public function restore($section)
     {
-        //
+        $restore = Sections::withTrashed()->find($section);
+        return $restore->trashed()
+            ? response()->json([
+                'message' => 'Section restored successfully',
+                'restore' => $restore->restore()
+            ], 200)
+            : abort(403, 'The section has already been restored');
     }
 }
