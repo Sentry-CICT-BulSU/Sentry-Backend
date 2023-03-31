@@ -27,6 +27,7 @@ class StoreUser extends FormRequest
     public function rules(): array
     {
         return [
+            'profile_img' => ['nullable', 'bail', 'image', 'mimes:png,jpg,jpeg,gif'],
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'unique:users,email', 'max:255'],
