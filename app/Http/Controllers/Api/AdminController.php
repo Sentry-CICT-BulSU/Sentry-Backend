@@ -18,12 +18,13 @@ class AdminController extends Controller
     {
         $this->middleware('admin');
     }
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::paginate(15);
+        $users = User::where('id', '!=', $request->user()->id)
+            ->paginate(15);
         return response()->json([
             'message' => 'Welcome to the admin dashboard',
-            'users' => $users
+            'paginate' => $users
         ], 200);
     }
     public function store(
