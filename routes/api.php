@@ -32,7 +32,7 @@ Route::middleware(['auth:api'])->group(function () {
     Route::prefix('admin')->name('admin.')->group(function () {
         Route::controller(AdminController::class)->group(function () {
             Route::post('users/{user}/restore', 'restore')->name('users.restore');
-            Route::resource('users', AdminController::class)->except(['index', 'create', 'edit']);
+            Route::resource('users', AdminController::class)->except(['create', 'edit']);
         });
 
         Route::controller(SemestersController::class)->group(function () {

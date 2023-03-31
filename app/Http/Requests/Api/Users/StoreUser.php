@@ -27,9 +27,13 @@ class StoreUser extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'unique:users,email', 'max:255'],
-            'password' => ['required', 'string', 'max:255'],
+            'password' => ['required', 'confirmed', 'string', 'max:255'],
+            'position' => ['required', 'string', 'max:255'],
+            'college' => ['required', 'string', 'max:255'],
+            'contact' => ['required', 'string', 'max:255'],
             'type' => ['required', 'string', Rule::in(User::TYPE_CAST), 'max:255']
         ];
     }

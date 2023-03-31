@@ -18,9 +18,14 @@ class AdminController extends Controller
     {
         $this->middleware('admin');
     }
-    /**
-     * Store a newly created resource in storage.
-     */
+    public function index()
+    {
+        $users = User::paginate(15);
+        return response()->json([
+            'message' => 'Welcome to the admin dashboard',
+            'users' => $users
+        ], 200);
+    }
     public function store(
         StoreUser $request,
         StoreNewUser $storeNewUser
