@@ -1,4 +1,5 @@
 {
+    "name": "sentry-backend",
     "private": true,
     "scripts": {
         "dev": "vite",
