@@ -76,4 +76,8 @@ class User extends Authenticatable
     {
         $this->attributes['password'] = Hash::make($password);
     }
+    public function getProfileImgAttribute($profile_img)
+    {
+        return $profile_img ? asset($profile_img) : null;
+    }
 }
