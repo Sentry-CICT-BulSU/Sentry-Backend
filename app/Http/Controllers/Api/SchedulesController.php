@@ -60,8 +60,18 @@ class SchedulesController extends Controller
     public function update(
         UpdateSchedulesRequest $request,
         Schedules $schedule
-    ): SchedulesResource {
-        //
+    ): SchedulesResource|JsonResponse {
+        try {
+            DB::beginTransaction();
+            $schedule->update($request->validated());
+            DB::commit();
+            return new SchedulesResource($schedule);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
     public function destroy(Schedules $schedule): JsonResponse
     {
