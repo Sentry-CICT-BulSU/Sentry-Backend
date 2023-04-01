@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Actions\Subjects\StoreNewSubject;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\SubjectsResource;
 use App\Models\Subjects;
 use App\Http\Requests\Api\Subjects\{
     StoreSubjectsRequest,
@@ -20,12 +21,8 @@ class SubjectsController extends Controller
     }
     public function index(): JsonResponse
     {
-        // $subjects = Subjects::paginate(15);
-        $subjects = Subjects::all();
-        return response()->json([
-            'message' => 'Subjects retrieved successfully',
-            'subjects' => $subjects
-        ], 200);
+        $subjects = Subjects::paginate(15);
+        return SubjectsResource::collection($subjects)->response();
     }
     public function store(StoreSubjectsRequest $request, StoreNewSubject $storeNewSubject): JsonResponse
     {
@@ -45,24 +42,18 @@ class SubjectsController extends Controller
             ], 500);
         }
     }
-    public function show(Subjects $subject): JsonResponse
+    public function show(Subjects $subject): SubjectsResource
     {
-        return response()->json([
-            'message' => 'Subject retrieved successfully',
-            'subject' => $subject
-        ], 200);
+        return new SubjectsResource($subject);
 
     }
-    public function update(UpdateSubjectsRequest $request, Subjects $subject): JsonResponse
+    public function update(UpdateSubjectsRequest $request, Subjects $subject): SubjectsResource|JsonResponse
     {
         try {
             DB::beginTransaction();
             $subject->update($request->validated());
             DB::commit();
-            return response()->json([
-                'message' => 'Subject updated successfully',
-                'subject' => $subject
-            ], 200);
+            return new SubjectsResource($subject);
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json([

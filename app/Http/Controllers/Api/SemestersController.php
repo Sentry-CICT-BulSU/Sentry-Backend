@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Actions\Semesters\{StoreNewSemester};
+use App\Http\Resources\SemestersResource;
 use App\Models\Semesters;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Semesters\{
@@ -20,12 +21,8 @@ class SemestersController extends Controller
     }
     public function index(): JsonResponse
     {
-        // $semesters = Semesters::paginate(15);
-        $semesters = Semesters::all();
-        return response()->json([
-            'message' => 'Semesters retrieved successfully',
-            'semesters' => $semesters
-        ], 200);
+        $semesters = Semesters::paginate(15);
+        return SemestersResource::collection($semesters)->response();
     }
 
     public function store(
@@ -48,25 +45,19 @@ class SemestersController extends Controller
             ], 500);
         }
     }
-    public function show(Semesters $semester): JsonResponse
+    public function show(Semesters $semester): SemestersResource
     {
-        return response()->json([
-            'message' => 'Semester retrieved successfully',
-            'semester' => $semester
-        ], 200);
+        return new SemestersResource($semester);
     }
     public function update(
         UpdateSemestersRequest $request,
         Semesters $semester
-    ): JsonResponse {
+    ): SemestersResource|JsonResponse {
         try {
             DB::beginTransaction();
             $semester->update($request->validated());
             DB::commit();
-            return response()->json([
-                'message' => 'Semester updated successfully',
-                'semester' => $semester
-            ], 200);
+            return new SemestersResource($semester);
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json([
