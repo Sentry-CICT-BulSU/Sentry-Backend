@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Actions\Sections\StoreNewSection;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\SectionsResource;
 use App\Models\Sections;
 use App\Http\Requests\Api\Sections\{
     StoreSectionsRequest,
@@ -21,12 +22,8 @@ class SectionsController extends Controller
     }
     public function index(): JsonResponse
     {
-        // $sections = Sections::paginate(15);
-        $sections = Sections::all();
-        return response()->json([
-            'message' => 'Sections retrieved successfully',
-            'sections' => $sections
-        ], 200);
+        $sections = Sections::paginate(15);
+        return SectionsResource::collection($sections)->response();
     }
     public function store(
         StoreSectionsRequest $request,
@@ -48,27 +45,21 @@ class SectionsController extends Controller
             ], 500);
         }
     }
-    public function show(Sections $section): JsonResponse
+    public function show(Sections $section): SectionsResource
     {
-        return response()->json([
-            'message' => 'Section retrieved successfully',
-            'section' => $section
-        ], 200);
+        return new SectionsResource($section);
     }
     public function update(
         UpdateSectionsRequest $request,
         Sections $section
-    ): JsonResponse {
+    ): SectionsResource|JsonResponse {
         try {
             DB::beginTransaction();
             $data = $request->validated();
             $data['adviser_id'] = $data['faculty_adviser'];
             $section->update(Arr::except($data, ['faculty_adviser']));
             DB::commit();
-            return response()->json([
-                'message' => 'Section updated successfully',
-                'section' => $section
-            ], 200);
+            return new SectionsResource($section);
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json([
