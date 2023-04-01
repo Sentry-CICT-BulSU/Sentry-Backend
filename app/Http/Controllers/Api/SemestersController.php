@@ -68,10 +68,14 @@ class SemestersController extends Controller
     }
     public function destroy(Semesters $semester): JsonResponse
     {
-        return response()->json([
-            'message' => 'The semester has already been soft deleted',
-            'deleted' => $semester->delete()
-        ], 200);
+        return !$semester->trashed()
+            ? response()->json([
+                'message' => 'Semester deleted successfully',
+                'deleted' => $semester->delete()
+            ], 200)
+            : response()->json([
+                'message' => 'The semester has already been restored',
+            ], 403);
     }
     public function restore($semester): JsonResponse
     {
@@ -81,6 +85,8 @@ class SemestersController extends Controller
                 'message' => 'Semester restored successfully',
                 'restore' => $restore->restore()
             ], 200)
-            : abort(403, 'The semester has already been restored');
+            : response()->json([
+                'message' => 'The semester has already been restored',
+            ], 403);
     }
 }

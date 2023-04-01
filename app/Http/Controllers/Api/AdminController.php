@@ -88,7 +88,9 @@ class AdminController extends Controller
                 'message' => 'User deleted successfully',
                 'deleted' => $user->delete()
             ], 200)
-            : abort(403, 'The user has already been soft deleted');
+            : response()->json([
+                'message' => 'The user has already been soft deleted',
+            ], 403);
     }
 
     public function restore($user): JsonResponse
@@ -99,6 +101,8 @@ class AdminController extends Controller
                 'message' => 'User restored successfully',
                 'restore' => $restore->restore()
             ], 200)
-            : abort(403, 'The user has already been restored');
+            : response()->json([
+                'message' => 'The user has already been restored',
+            ], 403);
     }
 }

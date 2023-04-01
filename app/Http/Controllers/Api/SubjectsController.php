@@ -64,10 +64,13 @@ class SubjectsController extends Controller
     }
     public function destroy(Subjects $subject): JsonResponse
     {
-        return response()->json([
-            'message' => 'The subject has already been soft deleted',
-            'deleted' => $subject->delete()
-        ], 200);
+        return !$subject->trashed()
+            ? response()->json([
+                'message' => 'The subject has already been soft deleted',
+                'deleted' => $subject->delete()
+            ], 200) : response()->json([
+                'message' => 'The room has already been restored',
+            ], 403);
     }
     public function restore($subject): JsonResponse
     {
@@ -77,6 +80,8 @@ class SubjectsController extends Controller
                 'message' => 'Subject restored successfully',
                 'restore' => $restore->restore()
             ], 200)
-            : abort(403, 'The subject has already been restored');
+            : response()->json([
+                'message' => 'The subject has already been restored',
+            ], 403);
     }
 }

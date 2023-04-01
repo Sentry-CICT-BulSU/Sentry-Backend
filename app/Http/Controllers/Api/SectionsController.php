@@ -75,7 +75,9 @@ class SectionsController extends Controller
                 'message' => 'Section deleted successfully',
                 'deleted' => $section->delete()
             ], 200)
-            : abort(403, 'The section has already been soft deleted');
+            : response()->json([
+                'message' => 'The section has already been soft deleted',
+            ], 403);
     }
 
     public function restore($section): JsonResponse
@@ -86,6 +88,8 @@ class SectionsController extends Controller
                 'message' => 'Section restored successfully',
                 'restore' => $restore->restore()
             ], 200)
-            : abort(403, 'The section has already been restored');
+            : response()->json([
+                'message' => 'The section has already been restored',
+            ], 403);
     }
 }
