@@ -4,28 +4,30 @@ namespace App\Http\Controllers\Api;
 
 use App\Actions\Schedules\StoreNewSchedule;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\SchedulesResource;
 use App\Models\Schedules;
 use App\Http\Requests\Api\Schedules\{
     StoreSchedulesRequest,
     UpdateSchedulesRequest
 };
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Summary of SchedulesController
+ */
 class SchedulesController extends Controller
 {
     function __construct()
     {
         $this->middleware('admin');
     }
-    public function index(): JsonResponse
+    public function index(): AnonymousResourceCollection
     {
         $schedule = Schedules::paginate(15);
         // $schedule = Schedules::all();
-        return response()->json([
-            'message' => 'Schedules retrieved successfully',
-            'schedules' => $schedule
-        ], 200);
+        return SchedulesResource::collection($schedule);
     }
     public function store(
         StoreSchedulesRequest $request,
@@ -46,7 +48,7 @@ class SchedulesController extends Controller
             ], 500);
         }
     }
-    public function show(Schedules $schedule): JsonResponse
+    public function show(Schedules $schedule): SchedulesResource
     {
         $schedule->load([
             'adviser' => fn($q) => $q->withTrashed(),
@@ -55,15 +57,12 @@ class SchedulesController extends Controller
             'room',
             'section'
         ]);
-        return response()->json([
-            'message' => 'Schedule retrieved successfully',
-            'schedule' => $schedule
-        ], 200);
+        return new SchedulesResource($schedule);
     }
     public function update(
         UpdateSchedulesRequest $request,
         Schedules $schedule
-    ): JsonResponse {
+    ): SchedulesResource {
         //
     }
     public function destroy(Schedules $schedule): JsonResponse
