@@ -75,10 +75,26 @@ class SchedulesController extends Controller
     }
     public function destroy(Schedules $schedule): JsonResponse
     {
-        //
+        return !$schedule->trashed()
+            ? response()->json([
+                'message' => 'Schedules deleted successfully',
+                'deleted' => $schedule->delete()
+            ], 200)
+            : response()->json([
+                'message' => 'The schedule has already been soft deleted',
+            ], 403);
     }
-    public function restore(Schedules $schedule): JsonResponse
+
+    public function restore($schedule): JsonResponse
     {
-        //
+        $restore = Schedules::withTrashed()->find($schedule);
+        return $restore->trashed()
+            ? response()->json([
+                'message' => 'Schedules restored successfully',
+                'restore' => $restore->restore()
+            ], 200)
+            : response()->json([
+                'message' => 'The schedule has already been restored',
+            ], 403);
     }
 }
