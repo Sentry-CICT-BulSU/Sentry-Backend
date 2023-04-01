@@ -4,13 +4,15 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Actions\Admin\StoreNewUser;
-use App\Http\Requests\Api\Users\StoreUser;
-use App\Http\Requests\Api\Users\UpdateUser;
+use App\Http\Requests\Api\Users\{
+    StoreUser,
+    UpdateUser
+};
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\{Auth, DB};
 
 class AdminController extends Controller
 {
@@ -22,10 +24,7 @@ class AdminController extends Controller
     {
         $users = User::where('id', '!=', $request->user()->id)
             ->paginate(15);
-        return response()->json([
-            'message' => 'Welcome to the admin dashboard',
-            'paginate' => $users
-        ], 200);
+        return UserResource::collection($users);
     }
     public function store(
         StoreUser $request,
@@ -52,11 +51,9 @@ class AdminController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(User $user): JsonResponse
+    public function show(User $user): UserResource
     {
-        return response()->json([
-            'user' => $user
-        ], 200);
+        return new UserResource($user);
     }
 
     /**
@@ -65,7 +62,7 @@ class AdminController extends Controller
     public function update(
         UpdateUser $request,
         User $user
-    ): JsonResponse {
+    ): UserResource|JsonResponse {
         try {
             DB::beginTransaction();
             $user->update(
@@ -74,10 +71,7 @@ class AdminController extends Controller
                 : $request->except(['password'])
             );
             DB::commit();
-            return response()->json([
-                'message' => 'User updated successfully',
-                'user' => $user
-            ], 200);
+            return new UserResource($user);
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json([
