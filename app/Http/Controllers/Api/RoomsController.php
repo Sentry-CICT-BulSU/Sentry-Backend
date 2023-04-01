@@ -4,28 +4,30 @@ namespace App\Http\Controllers\Api;
 
 use App\Actions\Rooms\StoreNewRoom;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\RoomResource;
 use App\Models\Rooms;
 use App\Http\Requests\Api\Rooms\{
     StoreRoomsRequest,
     UpdateRoomsRequest
 };
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Summary of RoomsController
+ */
 class RoomsController extends Controller
 {
     function __construct()
     {
         $this->middleware('admin');
     }
-    public function index(): JsonResponse
+    public function index(): AnonymousResourceCollection
     {
         $rooms = Rooms::paginate(15);
         // $rooms = Rooms::all();
-        return response()->json([
-            'message' => 'Rooms retrieved successfully',
-            'rooms' => $rooms,
-        ], 200);
+        return RoomResource::collection($rooms);
     }
     public function store(
         StoreRoomsRequest $request,
@@ -46,14 +48,11 @@ class RoomsController extends Controller
             ], 500);
         }
     }
-    public function show(Rooms $room): JsonResponse
+    public function show(Rooms $room): RoomResource
     {
-        return response()->json([
-            'message' => 'Room retrieved successfully',
-            'room' => $room,
-        ], 200);
+        return new RoomResource($room);
     }
-    public function update(UpdateRoomsRequest $request, Rooms $room): JsonResponse
+    public function update(UpdateRoomsRequest $request, Rooms $room): RoomResource
     {
         //
     }
