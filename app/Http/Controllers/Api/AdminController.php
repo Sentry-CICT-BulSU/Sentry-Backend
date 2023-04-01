@@ -12,7 +12,7 @@ use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\{Auth, DB};
+use Illuminate\Support\Facades\{DB};
 
 class AdminController extends Controller
 {
@@ -20,11 +20,11 @@ class AdminController extends Controller
     {
         $this->middleware('admin');
     }
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
         $users = User::where('id', '!=', $request->user()->id)
             ->paginate(15);
-        return UserResource::collection($users);
+        return UserResource::collection($users)->response();
     }
     public function store(
         StoreUser $request,

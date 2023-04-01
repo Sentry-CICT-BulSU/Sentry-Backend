@@ -11,7 +11,6 @@ use App\Http\Requests\Api\Schedules\{
     UpdateSchedulesRequest
 };
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -23,11 +22,10 @@ class SchedulesController extends Controller
     {
         $this->middleware('admin');
     }
-    public function index(): AnonymousResourceCollection
+    public function index(): JsonResponse
     {
         $schedule = Schedules::paginate(15);
-        // $schedule = Schedules::all();
-        return SchedulesResource::collection($schedule);
+        return SchedulesResource::collection($schedule)->response();
     }
     public function store(
         StoreSchedulesRequest $request,

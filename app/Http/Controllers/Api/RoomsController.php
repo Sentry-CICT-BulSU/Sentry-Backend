@@ -11,7 +11,6 @@ use App\Http\Requests\Api\Rooms\{
     UpdateRoomsRequest
 };
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -23,11 +22,11 @@ class RoomsController extends Controller
     {
         $this->middleware('admin');
     }
-    public function index(): AnonymousResourceCollection
+    public function index(): JsonResponse
     {
         $rooms = Rooms::paginate(15);
         // $rooms = Rooms::all();
-        return RoomResource::collection($rooms);
+        return RoomResource::collection($rooms)->response();
     }
     public function store(
         StoreRoomsRequest $request,
