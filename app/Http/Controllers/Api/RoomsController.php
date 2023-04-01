@@ -69,10 +69,25 @@ class RoomsController extends Controller
     }
     public function destroy(Rooms $room): JsonResponse
     {
-        //
+        return !$room->trashed()
+            ? response()->json([
+                'message' => 'Room deleted successfully',
+                'deleted' => $room->delete()
+            ], 200)
+            : response()->json([
+                'message' => 'The room has already soft deleted',
+            ], 403);
     }
     public function restore($room): JsonResponse
     {
-        //
+        $restore = Rooms::withTrashed()->find($room);
+        return $restore->trashed()
+            ? response()->json([
+                'message' => 'Room restored successfully',
+                'restore' => $restore->restore()
+            ], 200)
+            : response()->json([
+                'message' => 'The room has already been restored',
+            ], 403);
     }
 }
