@@ -20,8 +20,8 @@ class SchedulesController extends Controller
     }
     public function index(): JsonResponse
     {
-        // $schedule = Schedules::paginate(15);
-        $schedule = Schedules::all();
+        $schedule = Schedules::paginate(15);
+        // $schedule = Schedules::all();
         return response()->json([
             'message' => 'Schedules retrieved successfully',
             'schedules' => $schedule

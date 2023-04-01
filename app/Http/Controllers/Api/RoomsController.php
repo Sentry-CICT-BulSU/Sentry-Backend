@@ -20,8 +20,8 @@ class RoomsController extends Controller
     }
     public function index(): JsonResponse
     {
-        // $rooms = Rooms::all(15);
-        $rooms = Rooms::all();
+        $rooms = Rooms::paginate(15);
+        // $rooms = Rooms::all();
         return response()->json([
             'message' => 'Rooms retrieved successfully',
             'rooms' => $rooms,
