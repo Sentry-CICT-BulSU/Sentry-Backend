@@ -43,7 +43,7 @@ class RoomsController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
             return response()->json([
-                'message' => $e->getMessage(),
+                'error' => $e->getMessage(),
             ], 500);
         }
     }
@@ -51,9 +51,21 @@ class RoomsController extends Controller
     {
         return new RoomResource($room);
     }
-    public function update(UpdateRoomsRequest $request, Rooms $room): RoomResource
-    {
-        //
+    public function update(
+        UpdateRoomsRequest $request,
+        Rooms $room
+    ): RoomResource|JsonResponse {
+        try {
+            DB::beginTransaction();
+            $room->update($request->validated());
+            DB::commit();
+            return new RoomResource($room);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json([
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
     public function destroy(Rooms $room): JsonResponse
     {

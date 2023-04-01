@@ -11,7 +11,7 @@ class UpdateRoomsRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,9 @@ class UpdateRoomsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => ['nullable', 'bail', 'string', 'max:255', 'unique:rooms,name'],
+            'location' => ['nullable', 'bail', 'string', 'max:255'],
+            'status' => ['nullable', 'bail', 'string', 'max:255'],
         ];
     }
 }
