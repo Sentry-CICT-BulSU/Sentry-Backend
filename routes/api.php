@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\RoomsController;
 use App\Http\Controllers\Api\SchedulesController;
 use App\Http\Controllers\Api\SectionsController;
 use App\Http\Controllers\Api\SubjectsController;
+use App\Http\Controllers\RoomKeysController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -58,6 +59,11 @@ Route::middleware(['auth:api'])->group(function () {
         Route::controller(SchedulesController::class)->group(function () {
             Route::post('schedules/{schedule}/restore', 'restore')->name('schedules.restore');
             Route::resource('schedules', SchedulesController::class)->except(['create', 'edit']);
+        });
+
+        Route::controller(RoomKeysController::class)->group(function () {
+            Route::post('keys/{key}/restore', 'restore')->name('keys.restore');
+            Route::resource('keys', RoomKeysController::class)->except(['create', 'edit']);
         });
     });
 });

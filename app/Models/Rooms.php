@@ -16,6 +16,10 @@ class Rooms extends Model
 
     public function schedules()
     {
-        return $this->hasMany(\App\Models\Schedules::class, 'room_id');
+        return $this->hasMany(Schedules::class, 'room_id');
+    }
+    public function key()
+    {
+        return $this->hasOne(RoomKeys::class, 'room_id');
     }
 }
