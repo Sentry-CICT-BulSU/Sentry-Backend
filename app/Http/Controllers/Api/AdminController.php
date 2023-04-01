@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Actions\Admin\StoreNewUser;
+use App\Actions\Admin\{StoreNewUser, UpdateUser};
 use App\Http\Requests\Api\Users\{
     StoreUser,
-    UpdateUser
+    UpdateUserRequest
 };
 use App\Http\Resources\UserResource;
 use App\Models\User;
@@ -60,16 +60,13 @@ class AdminController extends Controller
      * Update the specified resource in storage.
      */
     public function update(
-        UpdateUser $request,
-        User $user
+        UpdateUserRequest $request,
+        User $user,
+        UpdateUser $updateUser
     ): UserResource|JsonResponse {
         try {
             DB::beginTransaction();
-            $user->update(
-                $request->has('password')
-                ? $request->all()
-                : $request->except(['password'])
-            );
+            $updateUser->handle($request, $user);
             DB::commit();
             return new UserResource($user);
         } catch (\Exception $e) {
