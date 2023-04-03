@@ -14,13 +14,13 @@ class RoomKeyLogsController extends Controller
 {
     public function index(): JsonResponse
     {
-        $keyLogs = RoomKeyLogs::latest()->paginate(15);
+        $keyLogs = RoomKeyLogs::withTrashed()->latest()->paginate(15);
         return RoomKeyLogsResource::collection($keyLogs)->response();
     }
     public function show(RoomKeys $key): JsonResponse
     {
         return RoomKeyLogsResource::collection(
-            $key->logs()->paginate(15)
+            $key->logs()->withTrashed()->paginate(15)
         )->response();
     }
 }
