@@ -24,7 +24,13 @@ class SchedulesController extends Controller
     }
     public function index(): JsonResponse
     {
-        $schedule = Schedules::paginate(15);
+        $schedule = Schedules::withTrashed()->with([
+            'section' => fn($q) => $q->withTrashed(),
+            'room' => fn($q) => $q->withTrashed(),
+            'adviser' => fn($q) => $q->withTrashed(),
+            'subject' => fn($q) => $q->withTrashed(),
+            'semester' => fn($q) => $q->withTrashed(),
+        ])->paginate(15);
         return SchedulesResource::collection($schedule)->response();
     }
     public function store(
