@@ -72,7 +72,7 @@ class RoomsController extends Controller
         return !$room->trashed()
             ? response()->json([
                 'message' => 'Room deleted successfully',
-                'deleted' => $room->delete()
+                'deleted' => $room->delete() && $room->key()->delete()
             ], 200)
             : response()->json([
                 'message' => 'The room has already soft deleted',
