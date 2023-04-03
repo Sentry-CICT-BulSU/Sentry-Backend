@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Http\Resources\RoomKeysResource;
 use App\Models\RoomKeys;
 use App\Http\Requests\Api\RoomKeys\{

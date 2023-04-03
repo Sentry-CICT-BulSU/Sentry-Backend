@@ -2,13 +2,13 @@
 
 use App\Http\Controllers\Api\{
     AdminController,
-    SemestersController
+    SchedulesController,
+    SectionsController,
+    SemestersController,
+    SubjectsController,
+    RoomKeysController,
+    RoomsController,
 };
-use App\Http\Controllers\Api\RoomsController;
-use App\Http\Controllers\Api\SchedulesController;
-use App\Http\Controllers\Api\SectionsController;
-use App\Http\Controllers\Api\SubjectsController;
-use App\Http\Controllers\RoomKeysController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
