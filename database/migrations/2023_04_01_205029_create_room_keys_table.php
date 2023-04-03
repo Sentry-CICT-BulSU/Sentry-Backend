@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('room_keys', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(\App\Models\Rooms::class, 'room_id')->constrained('rooms');
-            $table->string('status');
+            $table->string('status')->default(\App\Models\RoomKeys::AVAILABLE);
             $table->timestamps();
             $table->softDeletes();
         });

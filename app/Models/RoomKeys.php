@@ -10,10 +10,13 @@ class RoomKeys extends Model
 {
     use HasFactory, SoftDeletes;
 
+    public const AVAILABLE = '0';
+    public const IN_USE = '1';
+    public const LOST = '2';
     public const STATUSES = [
-        '0' => 'Available',
-        '1' => 'In Use',
-        '2' => 'Lost',
+        self::AVAILABLE => 'Available',
+        self::IN_USE => 'In Use',
+        self::LOST => 'Lost',
     ];
 
     protected $guarded = [];

@@ -2,66 +2,47 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\RoomKeysResource;
 use App\Models\RoomKeys;
 use App\Http\Requests\Api\RoomKeys\{
     StoreRoomKeysRequest,
     UpdateRoomKeysRequest
 };
+use App\Models\Schedules;
 use Illuminate\Http\JsonResponse;
 
 class RoomKeysController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(): JsonResponse
+    public function index(): RoomKeysResource
     {
-        //
+        $keys = RoomKeys::all();
+        return new RoomKeysResource($keys);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create(): JsonResponse
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreRoomKeysRequest $request): JsonResponse
     {
         //
     }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(RoomKeys $key): JsonResponse
+    public function show(RoomKeys $key): RoomKeysResource
     {
-        //
+        $key->load([
+            'room',
+            'schedules.section',
+            'schedules.adviser',
+            'schedules.subject',
+            'schedules.semester',
+            'schedules' => fn($q) => $q->orderBy('time_start') //->select('time_start', 'time_end')
+                ->where('time_start', '>=', now()->toTimeString())->first()
+        ]);
+        return new RoomKeysResource($key);
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(RoomKeys $key): JsonResponse
     {
         //
     }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UpdateRoomKeysRequest $request, RoomKeys $key): JsonResponse
     {
         //
     }
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(RoomKeys $key): JsonResponse
     {
         //
