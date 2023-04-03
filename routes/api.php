@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\{
     RoomKeysController,
     RoomsController,
 };
+use App\Http\Controllers\Api\RoomKeyLogsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -61,9 +62,15 @@ Route::middleware(['auth:api'])->group(function () {
             Route::resource('schedules', SchedulesController::class)->except(['create', 'edit']);
         });
 
+        Route::controller(RoomKeyLogsController::class)->group(function () {
+            // Route::post('keys/{key}/logs/{log}/restore', 'restore')->name('keys.logs.restore');
+            Route::get('logs', 'index')->name('key.logs.index');
+            Route::get('keys/{key}/logs', 'show')->name('key.logs.show');
+        });
+
         Route::controller(RoomKeysController::class)->group(function () {
             // Route::post('keys/{key}/restore', 'restore')->name('keys.restore');
-            Route::resource('keys', RoomKeysController::class)->except(['create', 'destroy', 'edit', 'store']);
+            Route::resource('keys', RoomKeysController::class)->except(['create', 'destroy', 'edit']);
         });
     });
 });

@@ -9,4 +9,22 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class RoomKeyLogs extends Model
 {
     use HasFactory, SoftDeletes;
+
+    public const RETURNED = '0';
+    public const BORROWED = '1';
+    public const LOST = '2';
+    public const STATUSES = [
+        self::RETURNED => 'Returned',
+        self::BORROWED => 'Borrowed',
+        self::LOST => 'Lost',
+    ];
+
+    protected $guarded = [];
+    protected $hidden = [];
+    protected $casts = [];
+
+    public function roomKey()
+    {
+        return $this->belongsTo(RoomKeys::class, 'room_key_id');
+    }
 }

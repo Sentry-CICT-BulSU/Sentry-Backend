@@ -11,7 +11,7 @@ class StoreRoomKeysRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,8 @@ class StoreRoomKeysRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'room_key_id' => ['required', 'exists:room_keys,id'],
+            'faculty_id' => ['required', 'exists:users,id'],
         ];
     }
 }

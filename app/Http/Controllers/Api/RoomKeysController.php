@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Actions\RoomKeys\StoreNewRoomKey;
+use App\Actions\RoomKeys\UpdateRoomKey;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\RoomKeyLogsResource;
 use App\Http\Resources\RoomKeysResource;
+use App\Models\RoomKeyLogs;
 use App\Models\RoomKeys;
 use App\Http\Requests\Api\RoomKeys\{
     StoreRoomKeysRequest,
     UpdateRoomKeysRequest
 };
-use App\Models\Schedules;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 
@@ -19,6 +22,19 @@ class RoomKeysController extends Controller
     {
         $keys = RoomKeys::all();
         return new RoomKeysResource($keys);
+    }
+    public function store(StoreRoomKeysRequest $request, StoreNewRoomKey $storeNewRoomKey): RoomKeyLogsResource|JsonResponse
+    {
+        try {
+            DB::beginTransaction();
+            $log = $storeNewRoomKey->handle($request);
+            DB::commit();
+            return new RoomKeyLogsResource($log);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
     public function show(RoomKeys $key): RoomKeysResource
     {
@@ -33,11 +49,11 @@ class RoomKeysController extends Controller
         ]);
         return new RoomKeysResource($key);
     }
-    public function update(UpdateRoomKeysRequest $request, RoomKeys $key): RoomKeysResource|JsonResponse
+    public function update(UpdateRoomKeysRequest $request, RoomKeys $key, UpdateRoomKey $updateRoomKey): RoomKeysResource|JsonResponse
     {
         try {
             DB::beginTransaction();
-            $key->update($request->validated());
+            $key = $updateRoomKey->handle($key, $request);
             DB::commit();
             return new RoomKeysResource($key);
         } catch (\Exception $e) {

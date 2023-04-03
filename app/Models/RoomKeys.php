@@ -31,4 +31,12 @@ class RoomKeys extends Model
     {
         return $this->hasManyThrough(Schedules::class, Rooms::class, 'id', 'room_id');
     }
+    public function logs()
+    {
+        return $this->hasMany(RoomKeyLogs::class, 'room_key_id')->latest();
+    }
+    public function log()
+    {
+        return $this->hasOne(RoomKeyLogs::class, 'room_key_id')->latest();
+    }
 }
