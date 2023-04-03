@@ -10,6 +10,7 @@ use App\Http\Requests\Api\RoomKeys\{
 };
 use App\Models\Schedules;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 
 class RoomKeysController extends Controller
 {
@@ -35,15 +36,25 @@ class RoomKeysController extends Controller
         ]);
         return new RoomKeysResource($key);
     }
-    public function edit(RoomKeys $key): JsonResponse
+    public function update(UpdateRoomKeysRequest $request, RoomKeys $key): RoomKeysResource|JsonResponse
     {
-        //
-    }
-    public function update(UpdateRoomKeysRequest $request, RoomKeys $key): JsonResponse
-    {
-        //
+        try {
+            DB::beginTransaction();
+            $key->update($request->validated());
+            DB::commit();
+            return new RoomKeysResource($key);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
     public function destroy(RoomKeys $key): JsonResponse
+    {
+        //
+    }
+    public function restore(RoomKeys $key): JsonResponse
     {
         //
     }

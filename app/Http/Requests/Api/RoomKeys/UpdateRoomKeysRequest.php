@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Api\RoomKeys;
 
+use App\Models\RoomKeys;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateRoomKeysRequest extends FormRequest
 {
@@ -11,7 +13,7 @@ class UpdateRoomKeysRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +24,7 @@ class UpdateRoomKeysRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'status' => ['required', 'string', Rule::in(array_keys(RoomKeys::STATUSES))]
         ];
     }
 }
