@@ -65,6 +65,10 @@ class User extends Authenticatable
     {
         return self::TYPES[$type];
     }
+    public function setTypeAttribute($type)
+    {
+        $this->attributes['type'] = array_keys(self::TYPES[$type]);
+    }
 
     public function setPasswordAttribute($password)
     {

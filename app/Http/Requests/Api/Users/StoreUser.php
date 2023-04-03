@@ -35,7 +35,7 @@ class StoreUser extends FormRequest
             'position' => ['required', 'string', 'max:255'],
             'college' => ['required', 'string', 'max:255'],
             'contact' => ['required', 'string', 'max:255'],
-            'type' => ['required', 'string', Rule::in(array_keys(User::TYPES)), 'max:255']
+            'type' => ['required', 'string', Rule::in(User::TYPES), 'max:255']
         ];
     }
 }
