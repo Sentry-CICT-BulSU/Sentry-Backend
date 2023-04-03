@@ -20,10 +20,6 @@ class RoomKeysController extends Controller
         $keys = RoomKeys::all();
         return new RoomKeysResource($keys);
     }
-    public function store(StoreRoomKeysRequest $request): JsonResponse
-    {
-        //
-    }
     public function show(RoomKeys $key): RoomKeysResource
     {
         $key->load([
@@ -50,13 +46,5 @@ class RoomKeysController extends Controller
                 'message' => $e->getMessage()
             ], 500);
         }
-    }
-    public function destroy(RoomKeys $key): JsonResponse
-    {
-        //
-    }
-    public function restore(RoomKeys $key): JsonResponse
-    {
-        //
     }
 }
