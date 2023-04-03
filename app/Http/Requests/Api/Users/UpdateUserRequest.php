@@ -32,7 +32,7 @@ class UpdateUserRequest extends FormRequest
             'position' => ['nullable', 'bail', 'string', 'max:255'],
             'college' => ['nullable', 'bail', 'string', 'max:255'],
             'contact' => ['nullable', 'bail', 'string', 'max:255'],
-            'type' => ['nullable', 'bail', 'string', Rule::in(User::TYPE_CAST), 'max:255']
+            'type' => ['nullable', 'bail', 'string', Rule::in(array_keys(User::TYPES)), 'max:255']
         ];
     }
 }

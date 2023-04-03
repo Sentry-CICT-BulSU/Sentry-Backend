@@ -28,7 +28,7 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('/user', fn(Request $request) => $request->user());
     Route::get('/user/types', fn(Request $request) => [
         // 'types' => $request->user()::TYPES,
-        'cast' => $request->user()::TYPE_CAST
+        'cast' => $request->user()::TYPES
     ]);
 
     Route::prefix('admin')->name('admin.')->group(function () {
