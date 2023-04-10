@@ -18,10 +18,10 @@ use Illuminate\Support\Facades\DB;
 
 class RoomKeysController extends Controller
 {
-    public function index(): RoomKeysResource
+    public function index(): JsonResponse
     {
-        $keys = RoomKeys::all();
-        return new RoomKeysResource($keys);
+        $keys = RoomKeys::with(['room'])->paginate(15);
+        return RoomKeysResource::collection($keys)->response();
     }
     public function store(StoreRoomKeysRequest $request, StoreNewRoomKey $storeNewRoomKey): RoomKeyLogsResource|JsonResponse
     {

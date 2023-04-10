@@ -39,4 +39,8 @@ class RoomKeys extends Model
     {
         return $this->hasOne(RoomKeyLogs::class, 'room_key_id')->latest();
     }
+    public function getStatusAttribute($status)
+    {
+        return self::STATUSES[$status];
+    }
 }
