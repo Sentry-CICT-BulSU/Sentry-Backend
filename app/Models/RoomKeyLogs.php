@@ -31,6 +31,10 @@ class RoomKeyLogs extends Model
     {
         return $this->belongsTo(User::class, 'faculty_id');
     }
+    public function subject()
+    {
+        return $this->belongsTo(Subjects::class, 'subject_id');
+    }
 
     public function getStatusAttribute($value)
     {

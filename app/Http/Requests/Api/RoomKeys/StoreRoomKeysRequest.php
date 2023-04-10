@@ -24,6 +24,7 @@ class StoreRoomKeysRequest extends FormRequest
         return [
             'room_key_id' => ['required', 'exists:room_keys,id'],
             'faculty_id' => ['required', 'exists:users,id'],
+            'subject_id' => ['required', 'exists:subjects,id'],
         ];
     }
 }
