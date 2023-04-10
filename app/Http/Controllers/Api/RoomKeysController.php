@@ -45,7 +45,9 @@ class RoomKeysController extends Controller
             'schedules.subject',
             'schedules.semester',
             'schedules' => fn($q) => $q->orderBy('time_start') //->select('time_start', 'time_end')
-                ->where('time_start', '>=', now()->toTimeString())->first()
+                ->where('time_start', '>=', now()->toTimeString())->first(),
+            'logs.faculty' => fn($q) => $q->withTrashed(),
+            'logs.roomKey',
         ]);
         return new RoomKeysResource($key);
     }
