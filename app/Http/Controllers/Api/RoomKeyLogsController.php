@@ -14,7 +14,11 @@ class RoomKeyLogsController extends Controller
 {
     public function index(): JsonResponse
     {
-        $keyLogs = RoomKeyLogs::withTrashed()->latest()->paginate(15);
+        $keyLogs = RoomKeyLogs::with([
+            'roomKey.room',
+            'faculty',
+            'subject',
+        ])->withTrashed()->latest()->paginate(15);
         return RoomKeyLogsResource::collection($keyLogs)->response();
     }
     public function show(RoomKeys $key): JsonResponse
