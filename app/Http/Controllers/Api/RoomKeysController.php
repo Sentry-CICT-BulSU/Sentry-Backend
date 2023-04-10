@@ -33,7 +33,7 @@ class RoomKeysController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage()
-            ], 500);
+            ], 403);
         }
     }
     public function show(RoomKeys $key): RoomKeysResource
@@ -49,6 +49,7 @@ class RoomKeysController extends Controller
             'logs.faculty' => fn($q) => $q->withTrashed(),
             'logs.roomKey.room',
             'logs.subject',
+            'logs' => fn($q) => $q->limit(20)
         ]);
         return new RoomKeysResource($key);
     }
