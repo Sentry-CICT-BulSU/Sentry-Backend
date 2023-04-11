@@ -70,6 +70,10 @@ class User extends Authenticatable
     {
         return Str::title($this->first_name . ' ' . $this->last_name);
     }
+    public function getTypeAttribute($type)
+    {
+        return self::TYPES[$type];
+    }
     public function setTypeAttribute($type)
     {
         $this->attributes['type'] = array_keys(self::TYPES[$type]);
