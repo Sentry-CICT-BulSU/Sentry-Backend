@@ -30,8 +30,8 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         // $request->session()->regenerate();
-        dump($request);
-        dd($request->toArray());
+        // dump($request);
+        // dd($request->toArray());
         return redirect()->intended();
     }
 
