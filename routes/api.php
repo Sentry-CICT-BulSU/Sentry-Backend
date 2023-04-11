@@ -31,7 +31,7 @@ Route::middleware(['auth:api'])->group(function () {
         'cast' => $request->user()::TYPES
     ]);
 
-    Route::prefix('admin')->name('admin.')->group(function () {
+    Route::prefix('admin')->name('admin.')->middleware(['admin'])->group(function () {
         Route::controller(AdminController::class)->group(function () {
             Route::post('users/{user}/restore', 'restore')->name('users.restore');
             Route::resource('users', AdminController::class)->except(['create', 'edit']);

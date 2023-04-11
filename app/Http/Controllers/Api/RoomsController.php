@@ -18,10 +18,6 @@ use Illuminate\Support\Facades\DB;
  */
 class RoomsController extends Controller
 {
-    function __construct()
-    {
-        $this->middleware('admin');
-    }
     public function index(): JsonResponse
     {
         $rooms = Rooms::paginate(15);

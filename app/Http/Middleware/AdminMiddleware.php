@@ -18,7 +18,7 @@ class AdminMiddleware
     public function handle(Request $request, Closure $next): Response|JsonResponse
     {
         $user = $request->user();
-        if ($user->type !== User::ADMIN) {
+        if ($user->type !== User::TYPES[USER::ADMIN]) {
             return response()->json([
                 'message' => 'You are not authorized to access this resource'
             ], 403);

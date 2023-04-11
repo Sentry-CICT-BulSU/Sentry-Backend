@@ -16,10 +16,6 @@ use Illuminate\Support\Facades\{DB};
 
 class AdminController extends Controller
 {
-    function __construct()
-    {
-        $this->middleware('admin');
-    }
     public function index(Request $request): JsonResponse
     {
         $users = User::where('id', '!=', $request->user()->id)

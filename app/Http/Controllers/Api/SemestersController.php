@@ -15,10 +15,6 @@ use \Illuminate\Support\Facades\DB;
 
 class SemestersController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('admin');
-    }
     public function index(): JsonResponse
     {
         $semesters = Semesters::paginate(15);
