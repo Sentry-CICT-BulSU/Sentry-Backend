@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Closure;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -16,9 +17,8 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response|JsonResponse
     {
-        $admin = $request->user()::ADMIN;
-        $types = $request->user()::TYPES;
-        if ($request->user()->type !== $types[$admin]) {
+        $user = $request->user();
+        if ($user->type !== User::ADMIN) {
             return response()->json([
                 'message' => 'You are not authorized to access this resource'
             ], 403);
