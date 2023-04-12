@@ -12,6 +12,7 @@ npm install
 composer install
 php artisan migrate
 php artisan db:seed
+npm run build
 chmod -R ugo+rw /.composer
 
 if [ ! -z "$PORT" ]; then
