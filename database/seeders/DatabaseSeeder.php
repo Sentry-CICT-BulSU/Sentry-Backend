@@ -16,12 +16,14 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
 
-        \App\Models\User::factory()->create([
-            'name' => 'Rhon Stratos',
-            'email' => 'rhondytioco@gmail.com',
-            'password' => Hash::make('admin'),
-            'type' => \App\Models\User::TYPES['admin'],
-        ]);
+        if (!\App\Models\User::where('email', 'rhondytioco@gmail.com')->exists()) {
+            \App\Models\User::factory()->create([
+                'name' => 'Rhon Stratos',
+                'email' => 'rhondytioco@gmail.com',
+                'password' => Hash::make('admin'),
+                'type' => \App\Models\User::TYPES['admin'],
+            ]);
+        }
         if (Client::all()->count() < 1) {
             app('Laravel\Passport\ClientRepository')->create(
                 null,
