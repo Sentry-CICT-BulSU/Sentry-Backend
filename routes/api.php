@@ -65,6 +65,7 @@ Route::middleware(['auth:api'])->group(function () {
         Route::controller(RoomKeyLogsController::class)->group(function () {
             // Route::post('keys/{key}/logs/{log}/restore', 'restore')->name('keys.logs.restore');
             Route::get('logs', 'index')->name('key.logs.index');
+            Route::get('logs/available', 'availableKeys')->name('key.logs.available-keys');
             Route::get('keys/{key}/logs', 'show')->name('key.logs.show');
         });
 

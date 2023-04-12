@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Actions\RoomKeyLogs\AvailableKeys;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\RoomKeyLogsResource;
 use App\Models\RoomKeyLogs;
@@ -26,5 +27,9 @@ class RoomKeyLogsController extends Controller
         return RoomKeyLogsResource::collection(
             $key->logs()->withTrashed()->paginate(15)
         )->response();
+    }
+    public function availableKeys(AvailableKeys $availableKey): JsonResponse
+    {
+        return response()->json($availableKey->handle());
     }
 }
