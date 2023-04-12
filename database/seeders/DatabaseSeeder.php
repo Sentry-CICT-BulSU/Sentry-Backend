@@ -19,10 +19,15 @@ class DatabaseSeeder extends Seeder
 
         if (!User::where('email', 'rhondytioco@gmail.com')->exists()) {
             User::factory()->create([
-                'name' => 'Rhon Stratos',
+                'first_name' => 'Rhon Stratos',
+                'last_name' => 'Stratos',
                 'email' => 'rhondytioco@gmail.com',
                 'password' => Hash::make('admin'),
                 'type' => User::TYPES[USER::ADMIN],
+                'profile_img' => null,
+                'position' => 'Admin',
+                'college' => 'College of Computer Studies',
+                'contact' => null
             ]);
         }
         if (Client::all()->count() < 1) {
