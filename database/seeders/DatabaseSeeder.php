@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Passport\Client;
+use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -16,12 +17,12 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
 
-        if (!\App\Models\User::where('email', 'rhondytioco@gmail.com')->exists()) {
-            \App\Models\User::factory()->create([
+        if (!User::where('email', 'rhondytioco@gmail.com')->exists()) {
+            User::factory()->create([
                 'name' => 'Rhon Stratos',
                 'email' => 'rhondytioco@gmail.com',
                 'password' => Hash::make('admin'),
-                'type' => \App\Models\User::ADMIN,
+                'type' => User::TYPES[USER::ADMIN],
             ]);
         }
         if (Client::all()->count() < 1) {
