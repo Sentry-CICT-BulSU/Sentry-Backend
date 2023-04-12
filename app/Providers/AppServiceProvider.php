@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Passport\Client;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
@@ -27,5 +28,6 @@ class AppServiceProvider extends ServiceProvider
             URL::forceScheme('https');
         }
         Vite::macro('images', fn(string $asset) => $this->asset("resources/assets/images/{$asset}"));
+        Artisan::call('storage:link');
     }
 }
