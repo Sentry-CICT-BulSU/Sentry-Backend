@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Facades\Artisan;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -53,6 +54,10 @@ class Handler extends ExceptionHandler
                 'Unable to query the "' . class_basename($e->getModel()) . '" you requested.',
                 404
             );
+        }
+
+        if ($e instanceof \LogicException && $e->getMessage() === 'Unable to read key from file file:///app/storage/oauth-private.key') {
+            Artisan::call('storage:link');
         }
 
         return parent::render($request, $e);
