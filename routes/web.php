@@ -16,7 +16,8 @@ use Illuminate\Support\Facades\Route;
 */
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/', function () {
-        return redirect(config('app.frontend_url'));
+        return 'Larvel: ' . Application::VERSION;
+        // return redirect(config('app.frontend_url'));
     });
 
     Route::get('/dashboard', function () {
