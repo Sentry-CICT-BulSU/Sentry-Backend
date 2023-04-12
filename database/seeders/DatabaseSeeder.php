@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
                 'profile_img' => null,
                 'position' => 'Admin',
                 'college' => 'College of Computer Studies',
-                'contact' => null
+                'contact' => fake()->phoneNumber()
             ]);
         }
         if (Client::all()->count() < 1) {
