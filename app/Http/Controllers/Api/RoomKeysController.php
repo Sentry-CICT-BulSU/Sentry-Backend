@@ -2,16 +2,19 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Actions\RoomKeys\StoreNewRoomKey;
-use App\Actions\RoomKeys\UpdateRoomKey;
+use App\Actions\RoomKeys\{
+    StoreNewRoomKey,
+    UpdateRoomKey
+};
 use App\Http\Controllers\Controller;
-use App\Http\Resources\RoomKeyLogsResource;
-use App\Http\Resources\RoomKeysResource;
-use App\Models\RoomKeyLogs;
-use App\Models\RoomKeys;
+use App\Http\Resources\{
+    RoomKeyLogsResource,
+    RoomKeysResource
+};
+use App\Models\{RoomKeys};
 use App\Http\Requests\Api\RoomKeys\{
     StoreRoomKeysRequest,
-    UpdateRoomKeysRequest
+    UpdateRoomKeysRequest,
 };
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;

@@ -71,6 +71,7 @@ Route::middleware(['auth:api'])->group(function () {
 
         Route::controller(RoomKeysController::class)->group(function () {
             // Route::post('keys/{key}/restore', 'restore')->name('keys.restore');
+            // Route::post('keys/{key}/return', 'return')->name('keys.return');
             Route::resource('keys', RoomKeysController::class)->except(['create', 'destroy', 'edit']);
         });
     });

@@ -11,12 +11,19 @@ class StoreNewRoomKey
     public function handle(StoreRoomKeysRequest $request)
     {
         $data = $request->validated();
+        $key = RoomKeys::find($data['room_key_id']);
         $currentStatus = RoomKeyLogs::where('room_key_id', $data['room_key_id'])->latest()->first()->status;
+
+        if (!$key) {
+            throw new \Exception('Room key not found');
+        }
         if ($currentStatus == RoomKeyLogs::STATUSES[RoomKeyLogs::BORROWED]) {
             throw new \Exception('Room key is already borrowed');
         } else if ($currentStatus == RoomKeyLogs::STATUSES[RoomKeyLogs::LOST]) {
             throw new \Exception('Room key is missing and cannot be borrowed');
         }
+
+        $key->update(['status' => RoomKeys::IN_USE]);
         $data['status'] = RoomKeyLogs::BORROWED;
         return RoomKeyLogs::create($data);
     }
