@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Passport\Client;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -21,5 +22,16 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('admin'),
             'type' => \App\Models\User::TYPES['admin'],
         ]);
+        if (Client::all()->count() < 1) {
+            app('Laravel\Passport\ClientRepository')->create(
+                null,
+                config('app.front_name'),
+                config('app.front_url') . '/auth/callback',
+                null,
+                false,
+                false,
+                false
+            );
+        }
     }
 }
