@@ -29,4 +29,5 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+ROute::get('/ping', fn() => response()->json('success', 200));
 require __DIR__ . '/auth.php';

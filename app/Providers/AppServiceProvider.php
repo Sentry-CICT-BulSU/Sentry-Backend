@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Passport\Client;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Passport\ClientRepository;
@@ -22,6 +23,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        if ($this->app->environment('production')) {
+            URL::forceScheme('https');
+        }
         Vite::macro('images', fn(string $asset) => $this->asset("resources/assets/images/{$asset}"));
     }
 }
