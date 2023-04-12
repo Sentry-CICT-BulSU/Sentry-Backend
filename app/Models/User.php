@@ -76,7 +76,12 @@ class User extends Authenticatable
     }
     public function setTypeAttribute($type)
     {
-        $this->attributes['type'] = array_keys(self::TYPES[$type]);
+
+        $this->attributes['type'] = match ($type) {
+            self::TYPES[self::ADMIN] => self::ADMIN,
+            self::TYPES[self::ATTENDANCE_CHECKER] => self::ATTENDANCE_CHECKER,
+            self::TYPES[self::FACULTY] => self::FACULTY,
+        };
     }
 
     public function setPasswordAttribute($password)
