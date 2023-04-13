@@ -56,9 +56,9 @@ class Handler extends ExceptionHandler
             );
         }
 
-        if ($e instanceof \LogicException && $e->getMessage() === 'Unable to read key from file file:///app/storage/oauth-private.key') {
-            Artisan::call('storage:link');
-        }
+        // if ($e instanceof \LogicException && $e->getMessage() === 'Unable to read key from file file:///app/storage/oauth-private.key') {
+        //     Artisan::call('storage:link');
+        // }
 
         return parent::render($request, $e);
     }
