@@ -25,15 +25,12 @@ class AdminController extends Controller
     public function store(
         StoreUser $request,
         StoreNewUser $storeNewUser
-    ): JsonResponse {
+    ): UserResource|JsonResponse {
         try {
             DB::beginTransaction();
             $faculty = $storeNewUser->handle($request);
             DB::commit();
-            return response()->json([
-                'message' => $request->type . ' created successfully',
-                $faculty->type => $faculty
-            ], 200);
+            return new UserResource($faculty);
         } catch (\Exception $e) {
             DB::rollBack();
             // dd($e);

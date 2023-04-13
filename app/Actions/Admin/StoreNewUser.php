@@ -9,7 +9,7 @@ class StoreNewUser
     public function handle(StoreUser $request): User
     {
         $data = $request->validated();
-        if ($$request->file('profile_img')) {
+        if ($request->file('profile_img')) {
             $fileName = $request->file('profile_img')->storePublicly('profile_imgs');
             if (!$fileName) {
                 throw new \Exception('Failed to upload profile image', 500);
