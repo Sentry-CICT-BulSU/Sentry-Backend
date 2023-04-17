@@ -25,7 +25,6 @@ class StoreSubjectsRequest extends FormRequest
             'title' => ['required', 'string', 'max:255', 'unique:subjects,title'],
             'code' => ['required', 'string', 'max:255', 'unique:subjects,code'],
             'status' => ['required', 'string', 'max:255'],
-            'section_id' => ['required', 'string', 'max:255', 'exists:sections,id'],
         ];
     }
 }

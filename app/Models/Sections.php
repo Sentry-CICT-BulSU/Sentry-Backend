@@ -25,10 +25,6 @@ class Sections extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function subjects()
-    {
-        return $this->hasMany(Subjects::class);
-    }
     public function schedule()
     {
         return $this->hasOne(Schedules::class);

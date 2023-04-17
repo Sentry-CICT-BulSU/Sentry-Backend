@@ -17,19 +17,18 @@ class SubjectsController extends Controller
 {
     public function index(): JsonResponse
     {
-        $subjects = Subjects::paginate(15);
+        $subjects = Subjects::query()
+            ->orderBy('title')
+            ->paginate(15);
         return SubjectsResource::collection($subjects)->response();
     }
-    public function store(StoreSubjectsRequest $request, StoreNewSubject $storeNewSubject): JsonResponse
+    public function store(StoreSubjectsRequest $request, StoreNewSubject $storeNewSubject): SubjectsResource|JsonResponse
     {
         try {
             DB::beginTransaction();
             $subject = $storeNewSubject->handle($request);
             DB::commit();
-            return response()->json([
-                'message' => 'Subject created successfully',
-                'subject' => $subject
-            ], 201);
+            return new SubjectsResource($subject);
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json([
