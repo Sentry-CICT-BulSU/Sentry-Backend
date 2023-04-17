@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Actions\Rooms\StoreNewRoom;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\RoomKeysResource;
 use App\Http\Resources\RoomResource;
 use App\Models\Rooms;
 use App\Http\Requests\Api\Rooms\{
@@ -27,15 +28,12 @@ class RoomsController extends Controller
     public function store(
         StoreRoomsRequest $request,
         StoreNewRoom $storeNewRoom
-    ): JsonResponse {
+    ): RoomKeysResource|JsonResponse {
         try {
             DB::beginTransaction();
             $room = $storeNewRoom->handle($request);
             DB::commit();
-            return response()->json([
-                'message' => 'Room created successfully',
-                'room' => $room,
-            ], 201);
+            return new RoomKeysResource($room);
         } catch (\Exception $e) {
             DB::rollback();
             return response()->json([

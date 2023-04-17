@@ -8,7 +8,7 @@ use App\Models\Rooms;
 
 class StoreNewRoom
 {
-    public function handle(StoreRoomsRequest $request): Rooms
+    public function handle(StoreRoomsRequest $request): RoomKeys
     {
         $room = Rooms::create($request->validated());
         return $room->key()->create([
