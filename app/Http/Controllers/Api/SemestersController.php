@@ -24,15 +24,12 @@ class SemestersController extends Controller
     public function store(
         StoreSemestersRequest $request,
         StoreNewSemester $storeNewSemester
-    ): JsonResponse {
+    ): SemestersResource|JsonResponse {
         try {
             DB::beginTransaction();
             $semester = $storeNewSemester->handle($request);
             DB::commit();
-            return response()->json([
-                'message' => 'Semester created successfully',
-                'semester' => $semester
-            ], 201);
+            return new SemestersResource($semester);
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json([

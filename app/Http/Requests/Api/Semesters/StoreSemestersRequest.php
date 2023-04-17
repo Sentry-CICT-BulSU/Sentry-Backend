@@ -27,8 +27,8 @@ class StoreSemestersRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'academic_year' => ['required', 'string', 'max:255'],
             'status' => ['required', 'string', 'max:255'],
-            'duration' => ['required', 'array', 'min:2', 'max:2'],
-            'duration.*' => ['required', 'string', 'max:255'],
+            'duration_start' => ['required', 'string', 'max:255'],
+            'duration_end' => ['required', 'string', 'max:255'],
         ];
     }
 }
