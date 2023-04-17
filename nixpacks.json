@@ -29,7 +29,8 @@
                 "php artisan view:cache",
                 "php artisan optimize",
                 "php artisan passport:keys",
-                "php artisan storage:link"
+                "php artisan storage:link",
+                "php artisan telescope:install"
             ]
         },
         "install": {
