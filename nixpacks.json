@@ -24,6 +24,7 @@
                 "php artisan storage:link",
                 "php artisan telescope:install",
                 "php artisan migrate --force",
+                "php artisan db:seed --force",
                 "php artisan cache:clear",
                 "php artisan optimize:clear",
                 "php artisan config:cache",

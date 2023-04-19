@@ -40,15 +40,17 @@ class DatabaseSeeder extends Seeder
                 false,
                 false
             );
-            $client->create(
-                null,
-                'localhost',
-                'http://localhost:4200' . '/auth/callback',
-                null,
-                false,
-                false,
-                false
-            );
+            if (config('app.env') === 'local') {
+                $client->create(
+                    null,
+                    'localhost',
+                    'http://localhost:4200' . '/auth/callback',
+                    null,
+                    false,
+                    false,
+                    false
+                );
+            }
         }
     }
 }
