@@ -6,7 +6,6 @@ use App\Models\Passport\Client;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -22,7 +21,7 @@ class DatabaseSeeder extends Seeder
                 'first_name' => 'Rhon Stratos',
                 'last_name' => 'Stratos',
                 'email' => 'rhondytioco@gmail.com',
-                'password' => Hash::make('admin'),
+                'password' => 'admin',
                 'type' => User::TYPES[USER::ADMIN],
                 'profile_img' => null,
                 'position' => 'Admin',
@@ -31,10 +30,20 @@ class DatabaseSeeder extends Seeder
             ]);
         }
         if (Client::all()->count() < 1) {
-            app('Laravel\Passport\ClientRepository')->create(
+            $client = app('Laravel\Passport\ClientRepository');
+            $client->create(
                 null,
                 config('app.front_name'),
                 config('app.front_url') . '/auth/callback',
+                null,
+                false,
+                false,
+                false
+            );
+            $client->create(
+                null,
+                'localhost',
+                'http://localhost:4200' . '/auth/callback',
                 null,
                 false,
                 false,
