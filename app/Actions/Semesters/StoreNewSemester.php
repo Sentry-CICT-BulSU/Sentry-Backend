@@ -18,7 +18,7 @@ class StoreNewSemester
         $conflict = Semesters::query()
             ->where('name', $req['name'])
             ->whereBetween('duration_start', [$start, $end])
-            ->orWhereBetween('duration_end', [$start, $end]);
+            ->whereBetween('duration_end', [$start, $end]);
         // dd($conflict->exists());
 
         if ($conflict->exists()) {
