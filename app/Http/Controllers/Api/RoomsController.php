@@ -23,8 +23,8 @@ class RoomsController extends Controller
     public function index(Request $request): JsonResponse
     {
         $rooms = Rooms::query()
-            ->when($request->q === 'active', fn($q) => $q->where('status', 'active'))
-            ->when($request->q === 'inactive', fn($q) => $q->where('status', 'inactive'))
+            ->when($request->has('q') && $request->q === 'active', fn($q) => $q->where('status', 'active'))
+            ->when($request->has('q') && $request->q === 'inactive', fn($q) => $q->where('status', 'inactive'))
             ->paginate(15);
         // $rooms = Rooms::all();
         return RoomResource::collection($rooms)->response();

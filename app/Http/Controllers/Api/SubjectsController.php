@@ -11,13 +11,16 @@ use App\Http\Requests\Api\Subjects\{
     UpdateSubjectsRequest
 };
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class SubjectsController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
         $subjects = Subjects::query()
+            ->when($request->has('q') && $request->q === 'active', fn($query) => $query->where('status', 'active'))
+            ->when($request->has('q') && $request->q === 'inactive', fn($query) => $query->where('status', 'inactive'))
             ->orderBy('title')
             ->paginate(15);
         return SubjectsResource::collection($subjects)->response();
