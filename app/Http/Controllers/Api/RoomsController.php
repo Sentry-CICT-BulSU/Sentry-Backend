@@ -12,6 +12,7 @@ use App\Http\Requests\Api\Rooms\{
     UpdateRoomsRequest
 };
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -19,9 +20,12 @@ use Illuminate\Support\Facades\DB;
  */
 class RoomsController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $rooms = Rooms::paginate(15);
+        $rooms = Rooms::query()
+            ->when($request->q === 'active', fn($q) => $q->where('status', 'active'))
+            ->when($request->q === 'inactive', fn($q) => $q->where('status', 'inactive'))
+            ->paginate(15);
         // $rooms = Rooms::all();
         return RoomResource::collection($rooms)->response();
     }
