@@ -17,24 +17,33 @@
 				</ul>
 			</div>
 		@endif
-		<div class="mt-2  buttons flex flex-row-reverse ">
-			<!-- Authorize Button -->
-			<form method="post" action="{{ route('passport.authorizations.approve') }}">
-				@csrf
-				<input type="hidden" name="state" value="{{ $request->state }}">
-				<input type="hidden" name="client_id" value="{{ $client->getKey() }}">
-				<input type="hidden" name="auth_token" value="{{ $authToken }}">
-				<button type="submit" class="btn btn-success">Authorize</button>
-			</form>
+		<div class="mt-2  buttons flex flex-row-reverse justify-between">
+			<div class="flex flex-row-reverse gap-x-1">
+				<!-- Authorize Button -->
+				<form method="post" action="{{ route('passport.authorizations.approve') }}">
+					@csrf
+					<input type="hidden" name="state" value="{{ $request->state }}">
+					<input type="hidden" name="client_id" value="{{ $client->getKey() }}">
+					<input type="hidden" name="auth_token" value="{{ $authToken }}">
+					<button type="submit" class="btn btn-success">Authorize</button>
+				</form>
 
-			<!-- Cancel Button -->
-			<form method="post" action="{{ route('passport.authorizations.deny') }}">
+				<!-- Cancel Button -->
+				<form method="post" action="{{ route('passport.authorizations.deny') }}">
+					@csrf
+					@method('DELETE')
+					<input type="hidden" name="state" value="{{ $request->state }}">
+					<input type="hidden" name="client_id" value="{{ $client->getKey() }}">
+					<input type="hidden" name="auth_token" value="{{ $authToken }}">
+					<button type="submit" class="btn btn-ghost">Cancel</button>
+				</form>
+			</div>
+
+			<!-- Logout Button -->
+			<form method="post" action="{{ route('logout') }}" class=" ">
 				@csrf
-				@method('DELETE')
-				<input type="hidden" name="state" value="{{ $request->state }}">
-				<input type="hidden" name="client_id" value="{{ $client->getKey() }}">
-				<input type="hidden" name="auth_token" value="{{ $authToken }}">
-				<button class="btn btn-ghost">Cancel</button>
+				<input type="hidden" name="redirect" value="api">
+				<button type="submit" class="btn btn-ghost">Logout</button>
 			</form>
 		</div>
 	</div>

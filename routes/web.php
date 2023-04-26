@@ -18,8 +18,9 @@ use App\Models\User;
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/', function () {
         return match (Auth::user()->type) {
-            User::TYPES[USER::ADMIN] => redirect('/telescope'),
-            default => 'Larvel: ' . Application::VERSION,
+            // User::TYPES[USER::ADMIN] => redirect('/telescope'),
+            // default => 'Larvel: ' . Application::VERSION,
+            default => redirect(config('app.frontend_url')),
         };
         // return redirect(config('app.frontend_url'));
     });

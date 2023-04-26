@@ -1,4 +1,5 @@
 <?php
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\AuthenticationController;
 
 
@@ -15,4 +16,6 @@ Route::middleware(['auth:api'])->group(function () {
         $request->user()->token()->revoke();
         return response()->json(['message' => 'User logged out successfully'], 200);
     });
+
+    Route::post('logout', [AuthenticatedSessionController::class, 'destroyApi']);
 });
