@@ -28,8 +28,8 @@ class AvailableKeys
         $increase = ($unavailableKeys / $total) * 100;
 
         return [
-            'availabe' => $availableKeys,
-            'availabe_percentage' => $decrease,
+            'available' => $availableKeys,
+            'available_percentage' => $decrease,
             'unavailable' => $unavailableKeys,
             'unavailable_percentage' => $increase,
             'total_keys' => $total,
