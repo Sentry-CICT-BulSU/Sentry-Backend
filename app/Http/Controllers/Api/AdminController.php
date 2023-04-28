@@ -19,6 +19,9 @@ class AdminController extends Controller
     public function index(Request $request): JsonResponse
     {
         $users = User::where('id', '!=', $request->user()->id)
+            ->when(($request->has('q') && $request->get('q') === 'trashed'), fn($q) => $q->onlyTrashed())
+            ->orderBy('first_name')
+            ->orderBy('last_name')
             ->paginate(15);
         return UserResource::collection($users)->response();
     }
