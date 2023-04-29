@@ -11,13 +11,19 @@ use App\Http\Requests\Api\Semesters\{
     UpdateSemestersRequest
 };
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use \Illuminate\Support\Facades\DB;
 
 class SemestersController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $semesters = Semesters::paginate(15);
+        $semesters = Semesters::query()
+            ->when(($request->has('q') && $request->get('q') === 'active'), fn($q) => $q->where('status', 'active'))
+            ->when(($request->has('q') && $request->get('q') === 'inactive'), fn($q) => $q->where('status', 'inactive'))
+            ->orderBy('name')
+            ->orderBy('academic_year')
+            ->paginate(15);
         return SemestersResource::collection($semesters)->response();
     }
 
