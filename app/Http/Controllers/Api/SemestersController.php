@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Actions\Semesters\{StoreNewSemester};
+use App\Actions\Semesters\UpdateSemester;
 use App\Http\Resources\SemestersResource;
 use App\Models\Semesters;
 use App\Http\Controllers\Controller;
@@ -50,11 +51,12 @@ class SemestersController extends Controller
     }
     public function update(
         UpdateSemestersRequest $request,
-        Semesters $semester
+        Semesters $semester,
+        UpdateSemester $updateSemester
     ): SemestersResource|JsonResponse {
         try {
             DB::beginTransaction();
-            $semester->update($request->validated());
+            $semester = $updateSemester->handle($semester, $request);
             DB::commit();
             return new SemestersResource($semester);
         } catch (\Exception $e) {

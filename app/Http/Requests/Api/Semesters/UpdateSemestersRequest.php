@@ -24,8 +24,8 @@ class UpdateSemestersRequest extends FormRequest
         return [
             'name' => ['nullable', 'bail', 'string', 'max:255'],
             'academic_year' => ['nullable', 'bail', 'string', 'max:255'],
-            'duration' => ['nullable', 'bail', 'array', 'max:255'],
-            'duration.*' => ['required_with:duration', 'string', 'max:255'],
+            'duration_start' => ['nullable', 'bail', 'string', 'max:255'],
+            'duration_end' => ['nullable', 'bail', 'string', 'max:255'],
             'status' => ['nullable', 'bail', 'string', 'max:255'],
         ];
     }

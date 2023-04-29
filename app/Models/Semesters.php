@@ -18,6 +18,8 @@ class Semesters extends Model
     protected $hidden = [];
     protected $casts = [
         // 'duration' => 'array'
+        'duration_start' => 'date',
+        'duration_end' => 'date'
     ];
 
     public function sections()
