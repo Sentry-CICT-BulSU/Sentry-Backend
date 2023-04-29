@@ -24,8 +24,15 @@
 				<img src="{{ Vite::images('cict_logo.png') }}" alt="logo" className="fill-current text-gray-500" />
 			</a>
 		</div>
+		@isset($header)
+			@if ($header->isNotEmpty())
+				<div class="w-full sm:max-w-lg mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg">
+					{{ $header }}
+				</div>
+			@endif
+		@endisset
 
-		<div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg">
+		<div class="w-full sm:max-w-lg mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg">
 			{{ $slot }}
 		</div>
 	</div>
