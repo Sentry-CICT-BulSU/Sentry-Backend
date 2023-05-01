@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\{
     RoomsController,
 };
 use App\Http\Controllers\Api\RoomKeyLogsController;
+use App\Http\Controllers\UsersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -26,10 +27,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:api'])->group(function () {
     Route::get('/user', fn(Request $request) => $request->user());
-    Route::get('/user/types', fn(Request $request) => [
-        // 'types' => $request->user()::TYPES,
-        'cast' => $request->user()::TYPES
-    ]);
+    Route::controller(UsersController::class)->group(function () {
+        Route::patch('/user', 'update')->name('users.update');
+    });
 
     Route::prefix('admin')->name('admin.')->middleware(['admin'])->group(function () {
         Route::controller(AdminController::class)->group(function () {

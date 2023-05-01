@@ -40,6 +40,8 @@ class UpdateUser
         // if ($request->contact) {
         //     $user->contact = $request->contact;
         // }
-        return $user->update($data);
+        $user->update($data);
+        dd($user);
+        return $user;
     }
 }

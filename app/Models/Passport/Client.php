@@ -7,11 +7,11 @@ class Client extends \Laravel\Passport\Client
     /**
      * Determine if the client should skip the authorization prompt.
      */
-    public function skipsAuthorization(): bool
-    {
-        // return $this->firstParty();
-        return $this->isFirstParty();
-    }
+    // public function skipsAuthorization(): bool
+    // {
+    //     // return $this->firstParty();
+    //     return $this->isFirstParty();
+    // }
 
     private function isFirstParty(): bool
     {
