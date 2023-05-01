@@ -25,7 +25,7 @@ class StoreSectionsRequest extends FormRequest
             'semester_id' => ['required', 'string'],
             'name' => ['required', 'string', 'max:255'],
             'status' => ['required', 'string', 'max:255'],
-            'faculty_adviser' => ['required', 'exists:users,id'],
+            'adviser_id' => ['required', 'exists:users,id'],
         ];
     }
 }
