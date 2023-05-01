@@ -20,7 +20,7 @@ class Sections extends Model
         return $this->belongsTo(Semesters::class);
     }
 
-    public function facultyAdviser()
+    public function adviser()
     {
         return $this->belongsTo(User::class);
     }

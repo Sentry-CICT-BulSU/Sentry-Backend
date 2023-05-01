@@ -11,15 +11,20 @@ use App\Http\Requests\Api\Sections\{
     UpdateSectionsRequest
 };
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 
 class SectionsController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $sections = Sections::paginate(15);
-        return SectionsResource::collection($sections)->response();
+        $sections = (match ($request->get('q')) {
+            'active' => Sections::where('status', 'active'),
+            'inactive' => Sections::where('status', 'inactive'),
+            default => Sections::query(),
+        })->with(['adviser', 'semester']);
+        return SectionsResource::collection($sections->paginate(15))->response();
     }
     public function store(
         StoreSectionsRequest $request,
