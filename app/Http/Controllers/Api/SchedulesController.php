@@ -52,20 +52,21 @@ class SchedulesController extends Controller
     }
     public function show(Schedules $schedule, Request $request): SchedulesResource
     {
-        return new SchedulesResource(
-            (match ($request->get('type')) {
-            'section' => Schedules::where('section_id', $request->get('id'))->get(),
-            'room' => Schedules::where('room_id', $request->get('id'))->get(),
-            'faculty' => Schedules::where('adviser_id', $request->get('id'))->get(),
+        $id = $schedule->semester->id;
+        $data = (match ($request->get('type')) {
+            'section' => Schedules::where([['section_id', $request->get('id')], ['semester_id', $id]])->get(),
+            'room' => Schedules::where([['room_id', $request->get('id')], ['semester_id', $id]])->get(),
+            'faculty' => Schedules::where([['adviser_id', $request->get('id')], ['semester_id', $id]])->get(),
             default => $schedule
-        })->load([
-                    'adviser' => fn($q) => $q->withTrashed(),
-                    'subject',
-                    'semester',
-                    'room',
-                    'section'
-                ])
-        );
+        });
+
+        return new SchedulesResource($data->load([
+            'adviser' => fn($q) => $q->withTrashed(),
+            'subject',
+            'semester',
+            'room',
+            'section'
+        ]));
     }
     public function update(
         UpdateSchedulesRequest $request,
