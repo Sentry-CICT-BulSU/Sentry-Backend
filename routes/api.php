@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\{
     RoomKeysController,
     RoomsController,
 };
+use App\Http\Controllers\Api\ListsController;
 use App\Http\Controllers\Api\RoomKeyLogsController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Http\Request;
@@ -27,11 +28,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:api'])->group(function () {
     Route::get('/user', fn(Request $request) => $request->user());
+
     Route::controller(UsersController::class)->group(function () {
         Route::patch('/user', 'update')->name('users.update');
     });
 
     Route::prefix('admin')->name('admin.')->middleware(['admin'])->group(function () {
+        Route::get('/list', ListsController::class);
+
         Route::controller(AdminController::class)->group(function () {
             Route::post('users/{user}/restore', 'restore')->name('users.restore');
             Route::resource('users', AdminController::class)->except(['create', 'edit']);

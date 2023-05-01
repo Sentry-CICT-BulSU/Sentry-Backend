@@ -11,6 +11,7 @@ use App\Http\Requests\Api\Schedules\{
     UpdateSchedulesRequest
 };
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -18,15 +19,19 @@ use Illuminate\Support\Facades\DB;
  */
 class SchedulesController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $schedule = Schedules::withTrashed()->with([
-            'section' => fn($q) => $q->withTrashed(),
-            'room' => fn($q) => $q->withTrashed(),
-            'adviser' => fn($q) => $q->withTrashed(),
-            'subject' => fn($q) => $q->withTrashed(),
-            'semester' => fn($q) => $q->withTrashed(),
-        ])->paginate(15);
+        $schedule = Schedules::query()
+            ->withTrashed()
+            ->with([
+                'section' => fn($q) => $q->withTrashed(),
+                'room' => fn($q) => $q->withTrashed(),
+                'adviser' => fn($q) => $q->withTrashed(),
+                'subject' => fn($q) => $q->withTrashed(),
+                'semester' => fn($q) => $q->withTrashed(),
+            ])
+            // ->when($request->has('q') && $request->q === 'faculty', fn($q) => $q->where('', 'faculty'))
+            ->paginate(15);
         return SchedulesResource::collection($schedule)->response();
     }
     public function store(
