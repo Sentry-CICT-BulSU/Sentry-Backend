@@ -35,7 +35,11 @@ class ListsController extends Controller
 
     public function faculty()
     {
-        return response()->json(User::query()->get(['id', 'first_name', 'last_name'])->append('full_name'));
+        return response()->json(
+            User::query()->whereNotIn('type', [USER::ADMIN])
+                ->get(['id', 'first_name', 'last_name'])
+                ->append('full_name')
+        );
     }
     public function subject()
     {
@@ -51,6 +55,10 @@ class ListsController extends Controller
     }
     public function semester()
     {
-        return response()->json(Semesters::query()->select(['id', DB::raw('CONCAT(name,\' - \', academic_year) as name_acad_yr')])->get());
+        return response()->json(
+            Semesters::query()->select([
+                'id', DB::raw('CONCAT(name,\' - \', academic_year) as name_acad_yr')
+            ])->get()
+        );
     }
 }

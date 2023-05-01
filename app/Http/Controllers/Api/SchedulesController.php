@@ -37,15 +37,12 @@ class SchedulesController extends Controller
     public function store(
         StoreSchedulesRequest $request,
         StoreNewSchedule $storeNewSchedule
-    ): JsonResponse {
+    ): SchedulesResource|JsonResponse {
         try {
             DB::beginTransaction();
             $schedule = $storeNewSchedule->handle($request);
             DB::commit();
-            return response()->json([
-                'message' => 'Schedule created successfully',
-                'schedule' => $schedule
-            ], 201);
+            return new SchedulesResource($schedule);
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json([
