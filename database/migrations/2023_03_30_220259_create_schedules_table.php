@@ -20,8 +20,8 @@ return new class extends Migration {
 
             $table->string('date_start');
             $table->string('date_end');
-            $table->string('time_start');
-            $table->string('time_end');
+            $table->time('time_start');
+            $table->time('time_end');
             $table->longText('active_days');
             $table->timestamps();
             $table->softDeletes();

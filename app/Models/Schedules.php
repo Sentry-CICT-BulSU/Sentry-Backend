@@ -15,11 +15,19 @@ class Schedules extends Model
     protected $casts = [
         // 'date_start' => 'date',
         // 'date_end' => 'date',
-        // 'time_start' => 'time',
-        // 'time_end' => 'time',
+        'time_start' => 'time',
+        'time_end' => 'time',
         'active_days' => 'array',
     ];
 
+    public function attendance()
+    {
+        return $this->hasOne(Attendances::class, 'schedule_id')->latestOfMany();
+    }
+    public function attendances()
+    {
+        return $this->hasMany(Attendances::class)->latest();
+    }
     public function section()
     {
         return $this->belongsTo(Sections::class);

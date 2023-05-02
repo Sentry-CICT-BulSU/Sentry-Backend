@@ -8,6 +8,7 @@ use App\Http\Requests\Api\Attendances\StoreAttendanceRequest;
 use App\Http\Requests\Api\Attendances\UpdateAttendanceRequest;
 use App\Http\Resources\AttendancesResource;
 use App\Models\Attendances;
+use App\Models\Schedules;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -16,17 +17,17 @@ class AttendanceController extends Controller
 {
     function __construct()
     {
-        $this->middleware('admin')->except(['index', 'show',]);
+        $this->middleware('admin')->except(['index', 'show', 'store']);
     }
     public function index(Request $request): JsonResponse
     {
         return AttendancesResource::collection(Attendances::paginate(15))->response();
     }
-    public function store(StoreAttendanceRequest $request, StoreNewAttendance $storeNewAttendance): AttendancesResource|JsonResponse
+    public function store(Schedules $schedule, StoreAttendanceRequest $request, StoreNewAttendance $storeNewAttendance): AttendancesResource|JsonResponse
     {
         try {
             DB::beginTransaction();
-            $attendance = $storeNewAttendance->handle($request);
+            $attendance = $storeNewAttendance->handle($schedule, $request);
             DB::commit();
             return new AttendancesResource($attendance);
         } catch (\Exception $err) {

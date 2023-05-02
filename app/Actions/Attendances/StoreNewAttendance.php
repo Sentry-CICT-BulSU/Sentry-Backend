@@ -4,11 +4,14 @@ namespace App\Actions\Attendances;
 
 use App\Http\Requests\Api\Attendances\StoreAttendanceRequest;
 use App\Models\Attendances;
+use App\Models\Schedules;
 
 class StoreNewAttendance
 {
-    function handle(StoreAttendanceRequest $request)
+    function handle(Schedules $schedule, StoreAttendanceRequest $request)
     {
-        return Attendances::create($request->validated());
+        $data = $request->validated();
+        $data['schedule_id'] = $schedule->id;
+        return Attendances::create($data);
     }
 }

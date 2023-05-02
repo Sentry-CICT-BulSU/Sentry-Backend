@@ -10,8 +10,11 @@ use App\Http\Requests\Api\Schedules\{
     StoreSchedulesRequest,
     UpdateSchedulesRequest
 };
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -21,15 +24,23 @@ class SchedulesController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
+        $schoolYear = Carbon::now()->year . '-' . Carbon::now()->addYear()->year;
+        $dayNameNow = Carbon::now()->dayName;
         $schedule = Schedules::query()
-            ->withTrashed()
             ->with([
                 'section' => fn($q) => $q->withTrashed(),
                 'room' => fn($q) => $q->withTrashed(),
                 'adviser' => fn($q) => $q->withTrashed(),
                 'subject' => fn($q) => $q->withTrashed(),
-                'semester' => fn($q) => $q->withTrashed(),
+                'semester' => fn($q) => match (Auth::user()->type) {
+                    User::ADMIN => $q->where('academic_year', $schoolYear)->withTrashed(),
+                    default => $q->where([['academic_year', $schoolYear], ['status', 'active']])
+                },
+                'attendance' => fn($q) => $q->withTrashed(),
             ])
+            ->whereJsonContains('active_days', strtolower($dayNameNow))
+            ->orderBy('time_start')
+            ->orderBy('time_end')
             // ->when($request->has('q') && $request->q === 'faculty', fn($q) => $q->where('', 'faculty'))
             ->paginate(15);
         return SchedulesResource::collection($schedule)->response();
@@ -52,7 +63,7 @@ class SchedulesController extends Controller
     }
     public function show(Schedules $schedule, Request $request): SchedulesResource
     {
-        $id = $schedule->semester->id;
+        $id = $schedule->semester_id;
         $data = (match ($request->get('type')) {
             'section' => Schedules::where([['section_id', $request->get('id')], ['semester_id', $id]])->get(),
             'room' => Schedules::where([['room_id', $request->get('id')], ['semester_id', $id]])->get(),
@@ -65,7 +76,7 @@ class SchedulesController extends Controller
             'subject',
             'semester',
             'room',
-            'section'
+            'section',
         ]));
     }
     public function update(

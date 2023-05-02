@@ -33,7 +33,11 @@ Route::middleware(['auth:api'])->group(function () {
     Route::controller(UsersController::class)->group(function () {
         Route::patch('/user', 'update')->name('users.update');
     });
-    Route::resource('/attendances', AttendanceController::class)->only(['index', 'show', 'store']);
+    Route::controller(AttendanceController::class)->group(function () {
+        Route::resource('/attendances', AttendanceController::class)->only(['index', 'show']);
+        Route::resource('/schedules.attendances', AttendanceController::class)->only(['store']);
+    });
+    Route::resource('/schedules', SchedulesController::class)->only(['index', 'show']);
 
     Route::prefix('admin')->name('admin.')->middleware(['admin'])->group(function () {
         Route::get('/list', ListsController::class);
