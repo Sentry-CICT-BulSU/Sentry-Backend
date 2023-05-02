@@ -2,15 +2,16 @@
 
 use App\Http\Controllers\Api\{
     AdminController,
+    AttendanceController,
+    ListsController,
     SchedulesController,
     SectionsController,
     SemestersController,
     SubjectsController,
+    RoomKeyLogsController,
     RoomKeysController,
     RoomsController,
 };
-use App\Http\Controllers\Api\ListsController;
-use App\Http\Controllers\Api\RoomKeyLogsController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -32,12 +33,12 @@ Route::middleware(['auth:api'])->group(function () {
     Route::controller(UsersController::class)->group(function () {
         Route::patch('/user', 'update')->name('users.update');
     });
+    Route::resource('/attendances', AttendanceController::class)->only(['index', 'show', 'store']);
 
     Route::prefix('admin')->name('admin.')->middleware(['admin'])->group(function () {
         Route::get('/list', ListsController::class);
 
         Route::controller(AdminController::class)->group(function () {
-            Route::post('users/{user}/restore', 'restore')->name('users.restore');
             Route::resource('users', AdminController::class)->except(['create', 'edit']);
         });
 
@@ -77,6 +78,11 @@ Route::middleware(['auth:api'])->group(function () {
             // Route::post('keys/{key}/restore', 'restore')->name('keys.restore');
             // Route::post('keys/{key}/return', 'return')->name('keys.return');
             Route::resource('keys', RoomKeysController::class)->except(['create', 'destroy', 'edit']);
+        });
+
+        Route::controller(AttendanceController::class)->group(function () {
+            Route::post('attendances/{attendance}/restore', 'restore')->name('attendances.restore');
+            Route::resource('/attendances', AttendanceController::class)->except(['store', 'update', 'create', 'edit']);
         });
     });
 });

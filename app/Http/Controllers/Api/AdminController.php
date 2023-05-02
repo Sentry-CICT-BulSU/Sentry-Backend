@@ -38,7 +38,7 @@ class AdminController extends Controller
             DB::rollBack();
             // dd($e);
             return response()->json([
-                'message' => 'Admin creation failed',
+                'message' => 'User creation failed',
                 'error' => $e->getMessage()
             ], 500);
         }
