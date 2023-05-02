@@ -34,6 +34,7 @@ Route::middleware(['auth:api'])->group(function () {
         Route::patch('/user', 'update')->name('users.update');
     });
     Route::controller(AttendanceController::class)->group(function () {
+        Route::get('/attendances/stats', 'statistics')->name('users.stats');
         Route::resource('/attendances', AttendanceController::class)->only(['index', 'show']);
         Route::resource('/schedules.attendances', AttendanceController::class)->only(['store']);
     });

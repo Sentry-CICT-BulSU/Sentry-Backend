@@ -2,26 +2,47 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Actions\Attendances\AttendancesStatistics;
 use App\Actions\Attendances\StoreNewAttendance;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Attendances\StoreAttendanceRequest;
 use App\Http\Requests\Api\Attendances\UpdateAttendanceRequest;
 use App\Http\Resources\AttendancesResource;
+use App\Http\Resources\SchedulesResource;
 use App\Models\Attendances;
 use App\Models\Schedules;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class AttendanceController extends Controller
 {
     function __construct()
     {
-        $this->middleware('admin')->except(['index', 'show', 'store']);
+        $this->middleware('admin')->except(['index', 'show', 'store', 'statistics']);
     }
     public function index(Request $request): JsonResponse
     {
-        return AttendancesResource::collection(Attendances::paginate(15))->response();
+        $schoolYear = Carbon::now()->year . '-' . Carbon::now()->addYear()->year;
+        $dayNameNow = Carbon::now()->dayName;
+        $attendances = Schedules::query()
+            ->with([
+                'adviser' => fn($q) => $q->withTrashed(),
+                'semester' => fn($q) => match (Auth::user()->type) {
+                    User::ADMIN => $q->where('academic_year', $schoolYear)->withTrashed(),
+                    default => $q->where('academic_year', $schoolYear)
+                },
+                'attendance' => fn($q) => $q->withTrashed(),
+            ])
+            ->whereJsonContains('active_days', strtolower($dayNameNow))
+            ->orderBy('time_start')
+            ->orderBy('time_end')
+            // ->when($request->has('q') && $request->q === 'faculty', fn($q) => $q->where('', 'faculty'))
+            ->paginate(15);
+        return SchedulesResource::collection($attendances)->response();
     }
     public function store(Schedules $schedule, StoreAttendanceRequest $request, StoreNewAttendance $storeNewAttendance): AttendancesResource|JsonResponse
     {
@@ -64,5 +85,10 @@ class AttendanceController extends Controller
             : response()->json([
                 'message' => 'The attendance has already been restored',
             ], 403);
+    }
+
+    public function statistics(AttendancesStatistics $attendancesStatistics): JsonResponse
+    {
+        return response()->json($attendancesStatistics->handle());
     }
 }
