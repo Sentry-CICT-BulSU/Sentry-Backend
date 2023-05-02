@@ -34,10 +34,26 @@ class SchedulesController extends Controller
                 'subject' => fn($q) => $q->withTrashed(),
                 'semester' => fn($q) => match (Auth::user()->type) {
                     User::ADMIN => $q->where('academic_year', $schoolYear)->withTrashed(),
-                    default => $q->where([['academic_year', $schoolYear], ['status', 'active']])
+                    default => $q->where('academic_year', $schoolYear)
                 },
                 'attendance' => fn($q) => $q->withTrashed(),
             ])
+            ->when(
+                ($request->has('q') && $request->get('q') === 'am'),
+                fn($q) => $q
+                    ->whereBetween('time_start', [
+                        Carbon::parse('00:00:00'),
+                        Carbon::parse('11:59:59')
+                    ])
+            )
+            ->when(
+                ($request->has('q') && $request->get('q') === 'pm'),
+                fn($q) => $q
+                    ->whereBetween('time_start', [
+                        Carbon::parse('12:00:00'),
+                        Carbon::parse('23:59:59')
+                    ])
+            )
             ->whereJsonContains('active_days', strtolower($dayNameNow))
             ->orderBy('time_start')
             ->orderBy('time_end')
