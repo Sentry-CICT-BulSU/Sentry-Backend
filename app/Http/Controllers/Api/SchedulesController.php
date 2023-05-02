@@ -29,7 +29,11 @@ class SchedulesController extends Controller
         $schedule = Schedules::query()
             ->with([
                 'section' => fn($q) => $q->withTrashed(),
-                'room' => fn($q) => $q->withTrashed(),
+                'room' => fn($q) => $q
+                    ->when(
+                        ($request->has('rid') && $request->get('rid') === 'am'),
+                        fn($rq) => $rq->where('id', $request->get('rid'))
+                    )->withTrashed(),
                 'adviser' => fn($q) => $q->withTrashed(),
                 'subject' => fn($q) => $q->withTrashed(),
                 'semester' => fn($q) => match (Auth::user()->type) {
@@ -40,19 +44,11 @@ class SchedulesController extends Controller
             ])
             ->when(
                 ($request->has('q') && $request->get('q') === 'am'),
-                fn($q) => $q
-                    ->whereBetween('time_start', [
-                        Carbon::parse('00:00:00'),
-                        Carbon::parse('11:59:59')
-                    ])
+                fn($q) => $q->whereBetween('time_start', [Carbon::parse('00:00:00'), Carbon::parse('11:59:59')])
             )
             ->when(
                 ($request->has('q') && $request->get('q') === 'pm'),
-                fn($q) => $q
-                    ->whereBetween('time_start', [
-                        Carbon::parse('12:00:00'),
-                        Carbon::parse('23:59:59')
-                    ])
+                fn($q) => $q->whereBetween('time_start', [Carbon::parse('12:00:00'), Carbon::parse('23:59:59')])
             )
             ->whereJsonContains('active_days', strtolower($dayNameNow))
             ->orderBy('time_start')

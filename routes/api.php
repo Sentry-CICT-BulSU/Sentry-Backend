@@ -37,6 +37,9 @@ Route::middleware(['auth:api'])->group(function () {
         Route::resource('/attendances', AttendanceController::class)->only(['index', 'show']);
         Route::resource('/schedules.attendances', AttendanceController::class)->only(['store']);
     });
+    Route::controller(RoomsController::class)->group(function () {
+        Route::resource('rooms', RoomsController::class)->only(['show']);
+    });
     Route::resource('/schedules', SchedulesController::class)->only(['index', 'show']);
 
     Route::prefix('admin')->name('admin.')->middleware(['admin'])->group(function () {
