@@ -23,6 +23,8 @@ class StoreNewSchedule
         if ($conflict->exists()) {
             throw new \Exception('Class schedule may conflict with other classes');
         }
-        return Schedules::create($request->validated());
+        $req['time_start'] = Carbon::parse($req['time_start'])->format('H:i');
+        $req['time_end'] = Carbon::parse($req['time_end'])->format('H:i');
+        return Schedules::create($req);
     }
 }

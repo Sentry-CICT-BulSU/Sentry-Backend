@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -15,8 +16,8 @@ class Schedules extends Model
     protected $casts = [
         // 'date_start' => 'date',
         // 'date_end' => 'date',
-        'time_start' => 'time',
-        'time_end' => 'time',
+        'time_start' => 'datetime:H:i',
+        'time_end' => 'datetime:H:i',
         'active_days' => 'array',
     ];
 
@@ -47,5 +48,14 @@ class Schedules extends Model
     public function semester()
     {
         return $this->belongsTo(Semesters::class);
+    }
+
+    public function getTimeStartAttribute()
+    {
+        return Carbon::parse($this->attributes['time_start'])->format('h:i A');
+    }
+    public function getTimeEndAttribute()
+    {
+        return Carbon::parse($this->attributes['time_end'])->format('h:i A');
     }
 }
