@@ -6,20 +6,34 @@ use App\Actions\RoomKeyLogs\AvailableKeys;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\RoomKeyLogsResource;
 use App\Models\RoomKeyLogs;
-use App\Http\Requests\StoreRoomKeyLogsRequest;
-use App\Http\Requests\UpdateRoomKeyLogsRequest;
 use App\Models\RoomKeys;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class RoomKeyLogsController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $keyLogs = RoomKeyLogs::with([
-            'roomKey.room',
-            'faculty',
-            'subject',
-        ])->withTrashed()->latest()->paginate(15);
+        $keyLogs = RoomKeyLogs::query()
+            ->with([
+                'roomKey.room',
+                'faculty',
+                'subject',
+            ])
+            ->when(
+                ($request->has('q') && $request->get('q') === RoomKeyLogs::STATUSES[RoomKeyLogs::RETURNED]),
+                fn($q) => $q->where('status', RoomKeyLogs::RETURNED)
+            )
+            ->when(
+                ($request->has('q') && $request->get('q') === RoomKeyLogs::STATUSES[RoomKeyLogs::BORROWED]),
+                fn($q) => $q->where('status', RoomKeyLogs::BORROWED)
+            )
+            ->when(
+                ($request->has('q') && $request->get('q') === RoomKeyLogs::STATUSES[RoomKeyLogs::LOST]),
+                fn($q) => $q->where('status', RoomKeyLogs::LOST)
+            )
+            ->withTrashed()
+            ->latest()->paginate(15);
         return RoomKeyLogsResource::collection($keyLogs)->response();
     }
     public function show(RoomKeys $key): JsonResponse

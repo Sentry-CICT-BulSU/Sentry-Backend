@@ -40,6 +40,12 @@ Route::middleware(['auth:api'])->group(function () {
     Route::controller(RoomsController::class)->group(function () {
         Route::resource('rooms', RoomsController::class)->only(['show']);
     });
+    Route::controller(RoomKeyLogsController::class)->group(function () {
+        // Route::post('keys/{key}/logs/{log}/restore', 'restore')->name('keys.logs.restore');
+        Route::get('logs', 'index')->name('key.logs.index');
+        Route::get('logs/available', 'availableKeys')->name('key.logs.available-keys');
+        // Route::get('keys/{key}/logs', 'show')->name('key.logs.show');
+    });
     Route::resource('/schedules', SchedulesController::class)->only(['index', 'show']);
 
     Route::prefix('admin')->name('admin.')->middleware(['admin'])->group(function () {
