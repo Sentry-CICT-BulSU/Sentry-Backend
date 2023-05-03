@@ -24,7 +24,7 @@ class UpdateSectionsRequest extends FormRequest
         return [
             'name' => ['nullable', 'bail', 'string', 'max:255'],
             'status' => ['nullable', 'bail', 'string', 'max:255'],
-            'faculty_adviser' => ['nullable', 'bail', 'exists:users,id'],
+            'adviser_id' => ['nullable', 'bail', 'exists:users,id'],
         ];
     }
 }

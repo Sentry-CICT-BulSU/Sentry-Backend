@@ -56,9 +56,7 @@ class SectionsController extends Controller
     ): SectionsResource|JsonResponse {
         try {
             DB::beginTransaction();
-            $data = $request->validated();
-            $data['adviser_id'] = $data['faculty_adviser'];
-            $section->update(Arr::except($data, ['faculty_adviser']));
+            $section->update($request->validated());
             DB::commit();
             return new SectionsResource($section);
         } catch (\Exception $e) {
