@@ -20,7 +20,7 @@ class Kernel extends HttpKernel
             \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
             \App\Http\Middleware\TrimStrings::class,
             \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
-            // \Illuminate\Http\Middleware\HandleCors::class,
+            \Illuminate\Http\Middleware\HandleCors::class,
     ];
 
     /**
@@ -68,6 +68,6 @@ class Kernel extends HttpKernel
         'verified' => \App\Http\Middleware\EnsureEmailIsVerified::class,
         // 'client' => \Laravel\Passport\Http\Middleware\CheckClientCredentials::class,
         'admin' => \App\Http\Middleware\AdminMiddleware::class,
-        // 'cors' => \App\Http\Middleware\CORS::class
+        'cors' => \Illuminate\Http\Middleware\HandleCors::class
     ];
 }
