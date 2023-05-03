@@ -44,13 +44,19 @@ class SchedulesController extends Controller
             ])
             ->when(
                 ($request->has('q') && $request->get('q') === 'am'),
-                fn($q) => $q->whereBetween('time_start', [Carbon::parse('00:00:00'), Carbon::parse('11:59:59')])
+                fn($q) => $q->whereBetween('time_start', [Carbon::parse('00:00:00')->toTimeString(), Carbon::parse('11:59:59')->toTimeString()])
             )
             ->when(
                 ($request->has('q') && $request->get('q') === 'pm'),
-                fn($q) => $q->whereBetween('time_start', [Carbon::parse('12:00:00'), Carbon::parse('23:59:59')])
+                fn($q) => $q->whereBetween('time_start', [Carbon::parse('12:00:00')->toTimeString(), Carbon::parse('23:59:59')->toTimeString()])
             )
             ->whereJsonContains('active_days', strtolower($dayNameNow))
+            ->when(
+                !($request->has('q')),
+                fn($q) => $q
+                    ->whereTime('time_start', '>=', Carbon::now()->toTimeString())
+                    ->whereTime('time_end', '<=', Carbon::now()->toTimeString())
+            )
             ->orderBy('time_start')
             ->orderBy('time_end')
             // ->when($request->has('q') && $request->q === 'faculty', fn($q) => $q->where('', 'faculty'))
