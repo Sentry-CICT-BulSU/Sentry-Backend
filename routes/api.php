@@ -28,10 +28,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(['auth:api'])->group(function () {
-    Route::get('/user', fn(Request $request) => $request->user());
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: *');
+header('Access-Control-Allow-Headers: *');
 
+Route::middleware(['auth:api'])->group(function () {
     Route::controller(UsersController::class)->group(function () {
+        Route::get('/user', fn(Request $request) => $request->user());
         Route::patch('/user', 'update')->name('users.update');
     });
     Route::controller(AttendanceController::class)->group(function () {

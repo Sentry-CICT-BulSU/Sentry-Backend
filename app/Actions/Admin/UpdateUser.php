@@ -16,32 +16,7 @@ class UpdateUser
             }
             $data['profile_img'] = $fileName;
         }
-        // if ($request->password) {
-        //     $user->password = $request->password;
-        // }
-        // if ($request->type) {
-        //     $user->type = $request->type;
-        // }
-        // if ($request->email) {
-        //     $user->email = $request->email;
-        // }
-        // if ($request->first_name) {
-        //     $user->first_name = $request->first_name;
-        // }
-        // if ($request->last_name) {
-        //     $user->last_name = $request->last_name;
-        // }
-        // if ($request->position) {
-        //     $user->position = $request->position;
-        // }
-        // if ($request->college) {
-        //     $user->college = $request->college;
-        // }
-        // if ($request->contact) {
-        //     $user->contact = $request->contact;
-        // }
         $user->update($data);
-        dd($user);
         return $user;
     }
 }
