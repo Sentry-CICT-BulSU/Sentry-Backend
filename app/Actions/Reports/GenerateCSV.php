@@ -25,8 +25,8 @@ class GenerateCSV
     {
         $todayFilter = [Carbon::now()->startOfDay(), Carbon::now()->endOfDay()];
         $thisWeekFilter = [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()];
-        $thisMonthFilter = [Carbon::now()->startOfMonth(), Carbon::now()->endOfWeek()];
-        $thisYearFilter = [Carbon::now()->startOfYear(), Carbon::now()->endOfWeek()];
+        $thisMonthFilter = [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()];
+        $thisYearFilter = [Carbon::now()->startOfYear(), Carbon::now()->endOfYear()];
         $schoolYearFillter = [Carbon::now()->startOfYear(), Carbon::now()->addYear()->endOfYear()];
 
         return match ($filter) {
