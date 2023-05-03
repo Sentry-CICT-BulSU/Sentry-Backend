@@ -23,7 +23,7 @@ class RoomKeysController extends Controller
 {
     public function index(): JsonResponse
     {
-        $keys = RoomKeys::with(['room'])->paginate(15);
+        $keys = RoomKeys::with(['room' => fn($q) => $q->orderBy('name')])->paginate(15);
         return RoomKeysResource::collection($keys)->response();
     }
     public function store(StoreRoomKeysRequest $request, StoreNewRoomKey $storeNewRoomKey): RoomKeyLogsResource|JsonResponse

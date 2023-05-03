@@ -48,6 +48,7 @@ Route::middleware(['auth:api'])->group(function () {
         // Route::get('keys/{key}/logs', 'show')->name('key.logs.show');
     });
     Route::resource('/schedules', SchedulesController::class)->only(['index', 'show']);
+    Route::resource('keys', RoomKeysController::class)->only(['index']);
 
     Route::prefix('admin')->name('admin.')->middleware(['admin'])->group(function () {
         Route::get('/list', ListsController::class);
