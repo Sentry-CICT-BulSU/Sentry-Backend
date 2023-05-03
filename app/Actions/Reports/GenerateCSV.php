@@ -72,7 +72,8 @@ class GenerateCSV
                         'subjects.code',
                         'subjects.title',
                     ])
-                    ->when(($request->has('time')), fn($q) => $q->whereBetween('attendances.created_at', $this->filterByTime($request->get('time')))),
+                    ->when(($request->has('time')), fn($q) => $q->whereBetween('attendances.created_at', $this->filterByTime($request->get('time'))))
+                    ->withTrashed(),
                 'room-keys' => RoomKeyLogs::query()
                     ->join('rooms', 'rooms.id', '=', 'room_key_logs.room_key_id')
                     ->join('users', 'users.id', '=', 'room_key_logs.faculty_id')
@@ -83,7 +84,8 @@ class GenerateCSV
                         'users.last_name',
                         'room_key_logs.created_at',
                     ])
-                    ->when(($request->has('time')), fn($q) => $q->whereBetween('room_key_logs.created_at', $this->filterByTime($request->get('time')))),
+                    ->when(($request->has('time')), fn($q) => $q->whereBetween('room_key_logs.created_at', $this->filterByTime($request->get('time'))))
+                    ->withTrashed(),
                 default => throw new \Exception('Type filter exception', 403),
             };
         } catch (\Exception $err) {
