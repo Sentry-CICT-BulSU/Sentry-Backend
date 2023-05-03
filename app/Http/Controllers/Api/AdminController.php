@@ -12,7 +12,7 @@ use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\{DB};
+use Illuminate\Support\Facades\{DB, Hash};
 
 class AdminController extends Controller
 {
@@ -43,18 +43,10 @@ class AdminController extends Controller
             ], 500);
         }
     }
-
-    /**
-     * Display the specified resource.
-     */
     public function show(User $user): UserResource
     {
         return new UserResource($user);
     }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(
         UpdateUserRequest $request,
         User $user,
@@ -96,5 +88,29 @@ class AdminController extends Controller
             : response()->json([
                 'message' => 'The user has already been restored',
             ], 403);
+    }
+
+    public function resetPassword(Request $request): UserResource|JsonResponse
+    {
+        $data = $request->validate([
+            'user_id' => ['required', 'exists:users,id'],
+            'current_password' => ['required', 'string', 'max:255'],
+            'password' => ['required', 'confirmed', 'string', 'max:255'],
+        ]);
+        try {
+            DB::beginTransaction();
+            $user = User::withTrashed()->findOrFail($data['user_id'])->first();
+            if (!Hash::check($data['curret_password'], $user->password))
+                throw new \Exception('Current password is incorrect', 403);
+            $user->update(['password' => Hash::make('cict-sentry-123')]);
+            DB::commit();
+            return new UserResource($user);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'message' => 'Password reset failed',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }

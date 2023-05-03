@@ -62,6 +62,7 @@ Route::middleware(['auth:api'])->group(function () {
             Route::get('reports', ReportsController::class)->name('reports');
         });
         Route::controller(AdminController::class)->group(function () {
+            Route::patch('reset-password', 'resetPassword')->name('reset.password');
             Route::resource('users', AdminController::class)->except(['create', 'edit']);
         });
 
