@@ -56,7 +56,7 @@ Route::middleware(['auth:api'])->group(function () {
         Route::get('/list', ListsController::class);
 
         Route::controller(ReportsController::class)->group(function () {
-            Route::get('reports')->name('reports');
+            Route::get('reports', ReportsController::class)->name('reports');
         });
         Route::controller(AdminController::class)->group(function () {
             Route::resource('users', AdminController::class)->except(['create', 'edit']);

@@ -27,7 +27,7 @@ class Schedules extends Model
     }
     public function attendances()
     {
-        return $this->hasMany(Attendances::class)->latest();
+        return $this->hasMany(Attendances::class, 'schedule_id')->latest();
     }
     public function section()
     {
