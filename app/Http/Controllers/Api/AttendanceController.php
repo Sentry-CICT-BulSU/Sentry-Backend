@@ -22,7 +22,7 @@ class AttendanceController extends Controller
 {
     function __construct()
     {
-        $this->middleware('admin')->except(['index', 'show', 'store', 'statistics']);
+        $this->middleware('admin')->except(['index', 'attendances', 'show', 'store', 'statistics']);
     }
     public function index(Request $request): JsonResponse
     {
@@ -30,7 +30,10 @@ class AttendanceController extends Controller
         $dayNameNow = Carbon::now()->dayName;
         $attendances = Schedules::query()
             ->with([
-                'adviser' => fn($q) => $q->withTrashed(),
+                'adviser' => fn($q) => $q->when(
+                    ($request->has('fid')),
+                    fn($qf) => $qf->where('id', $request->get('id'))
+                )->withTrashed(),
                 'semester' => fn($q) => match (Auth::user()->type) {
                     User::ADMIN => $q->where('academic_year', $schoolYear)->withTrashed(),
                     default => $q->where('academic_year', $schoolYear)
@@ -43,6 +46,12 @@ class AttendanceController extends Controller
             // ->when($request->has('q') && $request->q === 'faculty', fn($q) => $q->where('', 'faculty'))
             ->paginate(15);
         return SchedulesResource::collection($attendances)->response();
+    }
+    public function attendances(User $user): JsonResponse
+    {
+        return AttendancesResource::collection(
+            Attendances::where('user_id', $user->id)->latest()->withTrashed()->paginate(20)
+        )->response();
     }
     public function store(Schedules $schedule, StoreAttendanceRequest $request, StoreNewAttendance $storeNewAttendance): AttendancesResource|JsonResponse
     {

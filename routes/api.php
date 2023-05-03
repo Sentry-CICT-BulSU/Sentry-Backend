@@ -35,6 +35,7 @@ Route::middleware(['auth:api'])->group(function () {
     });
     Route::controller(AttendanceController::class)->group(function () {
         Route::get('/attendances/stats', 'statistics')->name('users.stats');
+        Route::get('/attendances/user/{user}', 'attendances')->name('users.attendances');
         Route::resource('/attendances', AttendanceController::class)->only(['index', 'show']);
         Route::resource('/schedules.attendances', AttendanceController::class)->only(['store']);
     });
