@@ -102,7 +102,7 @@ class AdminController extends Controller
             $user = User::withTrashed()->findOrFail($data['user_id'])->first();
             if (!Hash::check($data['curret_password'], $user->password))
                 throw new \Exception('Current password is incorrect', 403);
-            $user->update(['password' => Hash::make('cict-sentry-123')]);
+            $user->update(['password' => 'cict-sentry-123']);
             DB::commit();
             return new UserResource($user);
         } catch (\Exception $e) {
