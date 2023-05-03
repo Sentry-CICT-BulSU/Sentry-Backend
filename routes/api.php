@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\{
     RoomKeysController,
     RoomsController,
 };
+use App\Http\Controllers\Api\ReportsController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -54,6 +55,9 @@ Route::middleware(['auth:api'])->group(function () {
     Route::prefix('admin')->name('admin.')->middleware(['admin'])->group(function () {
         Route::get('/list', ListsController::class);
 
+        Route::controller(ReportsController::class)->group(function () {
+            Route::get('reports')->name('reports');
+        });
         Route::controller(AdminController::class)->group(function () {
             Route::resource('users', AdminController::class)->except(['create', 'edit']);
         });
