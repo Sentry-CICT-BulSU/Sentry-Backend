@@ -34,7 +34,7 @@ class SchedulesController extends Controller
                         ($request->has('rid') && $request->get('rid') === 'am'),
                         fn($rq) => $rq->where('id', $request->get('rid'))
                     )->withTrashed(),
-                'adviser' => fn($q) => $q->withTrashed(),
+                'adviser' => fn($q) => $q->when(($request->has('fid')), fn($qf) => $qf->where('id', $request->get('fid')))->withTrashed(),
                 'subject' => fn($q) => $q->withTrashed(),
                 'semester' => fn($q) => match (Auth::user()->type) {
                     User::ADMIN => $q->where('academic_year', $schoolYear)->withTrashed(),
