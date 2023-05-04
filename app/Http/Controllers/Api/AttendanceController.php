@@ -38,7 +38,9 @@ class AttendanceController extends Controller
                     User::ADMIN => $q->where('academic_year', $schoolYear)->withTrashed(),
                     default => $q->where('academic_year', $schoolYear)
                 },
-                'attendance' => fn($q) => $q->withTrashed(),
+                'attendance.user' => fn($q) => $q->withTrashed(),
+                'room' => fn($q) => $q->withTrashed(),
+                'subject' => fn($q) => $q->withTrashed(),
             ])
             ->whereJsonContains('active_days', strtolower($dayNameNow))
             ->orderBy('time_start')
