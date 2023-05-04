@@ -6,7 +6,6 @@ use App\Actions\Attendances\AttendancesStatistics;
 use App\Actions\Attendances\StoreNewAttendance;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Attendances\StoreAttendanceRequest;
-use App\Http\Requests\Api\Attendances\UpdateAttendanceRequest;
 use App\Http\Resources\AttendancesResource;
 use App\Http\Resources\SchedulesResource;
 use App\Models\Attendances;
