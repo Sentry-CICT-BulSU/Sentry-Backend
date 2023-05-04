@@ -94,14 +94,14 @@ class AdminController extends Controller
     {
         $data = $request->validate([
             'user_id' => ['required', 'exists:users,id'],
-            'current_password' => ['required', 'string', 'max:255'],
-            'password' => ['required', 'confirmed', 'string', 'max:255'],
+            // 'current_password' => ['required', 'string', 'max:255'],
+            // 'password' => ['required', 'confirmed', 'string', 'max:255'],
         ]);
         try {
             DB::beginTransaction();
             $user = User::withTrashed()->findOrFail($data['user_id'])->first();
-            if (!Hash::check($data['curret_password'], $user->password))
-                throw new \Exception('Current password is incorrect', 403);
+            // if (!Hash::check($data['curret_password'], $user->password))
+            //     throw new \Exception('Current password is incorrect', 403);
             $user->update(['password' => 'cict-sentry-123']);
             DB::commit();
             return new UserResource($user);
