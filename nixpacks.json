@@ -23,7 +23,7 @@
                 "php artisan passport:keys",
                 "php artisan storage:link",
                 "php artisan telescope:install",
-                "php artisan migrate --force",
+                "php artisan migrate:fresh --force",
                 "php artisan db:seed --force",
                 "php artisan cache:clear",
                 "php artisan optimize:clear",
