@@ -50,10 +50,10 @@ class SchedulesController extends Controller
                 ($request->has('q') && $request->get('q') === 'pm'),
                 fn($q) => $q->whereBetween('time_start', [Carbon::parse('12:00:00')->toTimeString(), Carbon::parse('23:59:59')->toTimeString()])
             )
-            ->whereJsonContains('active_days', strtolower($dayNameNow))
             ->when(
-                (Auth::user()->type !== User::ADMIN),
+                (Auth::user()->type !== User::TYPES[User::ADMIN]),
                 fn($q) => $q
+                    ->whereJsonContains('active_days', strtolower($dayNameNow))
                     ->whereTime('time_start', '>=', Carbon::now()->toTimeString())
                     ->whereTime('time_end', '<=', Carbon::now()->toTimeString())
             )
