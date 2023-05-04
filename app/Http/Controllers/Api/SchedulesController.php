@@ -55,7 +55,7 @@ class SchedulesController extends Controller
                     ->whereTime('time_end', '<=', Carbon::parse('23:59:59')->toTimeString())
             )
             ->when(
-                (Auth::user()->type !== User::TYPES[User::ADMIN]),
+                (!$request->has('q') && Auth::user()->type !== User::TYPES[User::ADMIN]),
                 fn($q) => $q
                     ->whereJsonContains('active_days', strtolower($dayNameNow))
                     ->whereTime('time_start', '>=', Carbon::now()->toTimeString())
