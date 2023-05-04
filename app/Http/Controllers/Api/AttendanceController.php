@@ -42,10 +42,12 @@ class AttendanceController extends Controller
                 'room' => fn($q) => $q->withTrashed(),
                 'subject' => fn($q) => $q->withTrashed(),
             ])
-            ->whereJsonContains('active_days', strtolower($dayNameNow))
+            ->when(
+                (!$request->has('no-filter')),
+                fn($q) => $q->whereJsonContains('active_days', strtolower($dayNameNow))
+            )
             ->orderBy('time_start')
             ->orderBy('time_end')
-            // ->when($request->has('q') && $request->q === 'faculty', fn($q) => $q->where('', 'faculty'))
             ->paginate(15);
         return SchedulesResource::collection($attendances)->response();
     }
