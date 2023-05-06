@@ -52,16 +52,17 @@
 										<td>{{ 'test' }}</td>
 									</tr>
 								@endforeach --}}
+                                {{dd($rpts)}}
 								@foreach ($rpts as $report)
 									<tr>
-										<td>{{ $report['name'] }}</td>
+										<td>{{ $report['sem_name'] }}</td>
 										<td>{{ $report['academic_year'] }}</td>
 										<td>{{ $report['first_name'] }}</td>
 										<td>{{ $report['last_name'] }}</td>
 										<td>{{ $report['email'] }}</td>
 										<td>{{ $report['status'] }}</td>
 										<td>{{ $report['created_at'] }}</td>
-										<td>{{ $report['name'] }}</td>
+										<td>{{ $report['room_name'] }}</td>
 										<td>{{ $report['code'] }}</td>
 										<td>{{ $report['title'] }}</td>
 									</tr>
