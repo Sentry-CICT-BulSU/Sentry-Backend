@@ -49,11 +49,11 @@
 								@endforeach --}}
 								@foreach ($rpts as $report)
 									<tr>
-										<td>{{ $report['rooms.name'] }}</td>
-										<td>{{ $report['room_key_logs.status'] }}</td>
-										<td>{{ $report['users.first_name'] }}</td>
-										<td>{{ $report['users.last_name'] }}</td>
-										<td>{{ $report['room_key_logs.created_at'] }}</td>
+										<td>{{ $report['name'] }}</td>
+										<td>{{ $report['status'] }}</td>
+										<td>{{ $report['first_name'] }}</td>
+										<td>{{ $report['last_name'] }}</td>
+										<td>{{ $report['created_at'] }}</td>
 									</tr>
 								@endforeach
 							</tbody>

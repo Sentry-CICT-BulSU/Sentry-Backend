@@ -54,16 +54,16 @@
 								@endforeach --}}
 								@foreach ($rpts as $report)
 									<tr>
-										<td>{{ $report['semesters.name'] }}</td>
-										<td>{{ $report['semesters.academic_year'] }}</td>
-										<td>{{ $report['users.first_name'] }}</td>
-										<td>{{ $report['users.last_name'] }}</td>
-										<td>{{ $report['users.email'] }}</td>
-										<td>{{ $report['attendances.status'] }}</td>
-										<td>{{ $report['attendances.created_at'] }}</td>
-										<td>{{ $report['rooms.name'] }}</td>
-										<td>{{ $report['subjects.code'] }}</td>
-										<td>{{ $report['subjects.title'] }}</td>
+										<td>{{ $report['name'] }}</td>
+										<td>{{ $report['academic_year'] }}</td>
+										<td>{{ $report['first_name'] }}</td>
+										<td>{{ $report['last_name'] }}</td>
+										<td>{{ $report['email'] }}</td>
+										<td>{{ $report['status'] }}</td>
+										<td>{{ $report['created_at'] }}</td>
+										<td>{{ $report['name'] }}</td>
+										<td>{{ $report['code'] }}</td>
+										<td>{{ $report['title'] }}</td>
 									</tr>
 								@endforeach
 							</tbody>

@@ -23,19 +23,18 @@ class ReportsController extends Controller
     }
     public function pdf(Request $request, GeneratePDF $generatePDF): mixed
     {
-        return $generatePDF->handle($request);
-        // try {
-        //     return $generatePDF->handle($request);
-        // } catch (\Exception $err) {
-        //     return response()->json(['error' => $err->getMessage()]);
-        // }
+        try {
+            return $generatePDF->handle($request);
+        } catch (\Exception $err) {
+            return response()->json(['error' => $err->getMessage()]);
+        }
     }
     public function view(Request $request, GeneratePDF $generatePDF): mixed
     {
         try {
             return $generatePDF->handle($request);
         } catch (\Exception $err) {
-            return response()->json(['error' => $err->getMessage(), 'trace' => $err->getTrace()]);
+            return response()->json(['error' => $err->getMessage()]);
         }
     }
 }
