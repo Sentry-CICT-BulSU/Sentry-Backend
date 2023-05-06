@@ -59,7 +59,7 @@ Route::middleware(['auth:api'])->group(function () {
         Route::get('/list', ListsController::class);
 
         Route::controller(ReportsController::class)->group(function () {
-            Route::get('reports', ReportsController::class)->name('reports');
+            Route::get('reports', [ReportsController::class, 'csv'])->name('reports');
         });
         Route::controller(AdminController::class)->group(function () {
             Route::patch('reset-password', 'resetPassword')->name('reset.password');

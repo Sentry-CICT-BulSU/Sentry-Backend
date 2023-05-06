@@ -14,6 +14,7 @@ export default ({ mode }) => {
             laravel({
                 input: [
                     'resources/css/app.css',
+                    'resources/css/pdf.css',
                     'resources/js/app.js',
                 ],
                 refresh: true,

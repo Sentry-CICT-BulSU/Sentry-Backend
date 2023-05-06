@@ -1,0 +1,147 @@
+ .img_head {
+     margin: auto auto;
+     text-align: center;
+     padding: 0;
+     width: 100px;
+ }
+
+ .m-2 {
+     margin-bottom: 5px;
+ }
+
+ .header {
+     margin: auto auto;
+     text-align: center;
+ }
+
+ .header_p {
+     font-size: medium;
+     text-transform: capitalize;
+ }
+
+ .header_p h1 {
+     font-size: larger;
+     font-weight: bold;
+ }
+
+ .px-2 {
+     padding-left: 8px;
+     padding-right: 8px;
+ }
+
+ .top_table {
+     width: 100%;
+     margin-top: 16px;
+     margin-bottom: 16px;
+ }
+
+ .bottom_table,
+ .bottom_tr,
+ .bottom_td,
+ .bottom_table_th {
+     border-collapse: collapse;
+     padding: 8px;
+ }
+
+ .bottom_table {
+     margin-bottom: 16px;
+ }
+
+ .bottom_table_th {
+     width: 33.333333%;
+ }
+
+ .information {
+     line-height: 20px;
+ }
+
+ .total {
+     width: 100%;
+     font-weight: bold;
+     text-align: right;
+ }
+
+ .pagination {
+     position: fixed;
+     bottom: 0px;
+     width: 100%;
+     text-align: right;
+ }
+
+ h2 {
+     font-size: 20px;
+ }
+
+ th {
+     text-align: left;
+ }
+
+ td {
+     vertical-align: top;
+ }
+
+ .text-end {
+     text-align: right;
+ }
+
+ .body {
+     margin: auto;
+     margin-top: -30px;
+ }
+
+ .body_header {
+     /* display: flex;
+    flex-direction: row; */
+     /* justify-content: space-between; */
+ }
+
+ .body_header div:nth-child(1) {
+     float: left;
+ }
+
+ .body_header div:nth-child(2) {
+     float: right;
+ }
+
+ .body_table {
+     margin-top: 30px;
+ }
+
+ .body_footer div:nth-child(1) {
+     float: left;
+ }
+
+ .body_footer div:nth-child(2) {
+     float: right;
+ }
+
+ /* table */
+ div.body_table table {
+     border: 2px solid black;
+     padding: 0;
+     border-collapse: collapse;
+     width: 100%;
+     text-align: center;
+ }
+
+ /* table thead */
+ /* div.body_table > table > thead {
+} */
+ /* table tr */
+ /* div.body_table > table > thead > tr {
+} */
+ /* table thead and tbody border */
+ div.body_table table thead tr th,
+ div.body_table table tbody tr td,
+ .boder-override {
+     border: 1px solid black;
+     font-family: 'Product Sans';
+ }
+
+ .text-center {
+     text-align: center;
+ }
+
+ .font {
+     font-family: 'Product Sans';
+ }
