@@ -52,7 +52,6 @@
 										<td>{{ 'test' }}</td>
 									</tr>
 								@endforeach --}}
-                                {{dd($rpts)}}
 								@foreach ($rpts as $report)
 									<tr>
 										<td>{{ $report['sem_name'] }}</td>
