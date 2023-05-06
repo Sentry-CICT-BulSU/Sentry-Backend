@@ -1,7 +1,7 @@
 @extends('pdf.Layouts.index')
 @section('content')
 	<div>
-		@foreach (collect($reports)->chunk(23) as $rpts)
+		@foreach (collect($reports)->chunk(18) as $rpts)
 			<div class="page-{{ $loop->iteration }}">
 				<table style="width: 100%;position: absolute; top: 10px;">
 					<tr>
@@ -38,7 +38,7 @@
 								@endforeach
 							</thead>
 							<tbody class="text-center">
-								{{-- @foreach (range(1, 23) as $report)
+								{{-- @foreach (range(1, 18) as $report)
 									<tr>
 										<td>{{ 'test' }}</td>
 										<td>{{ 'test' }}</td>
