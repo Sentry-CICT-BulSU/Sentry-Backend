@@ -43,7 +43,7 @@ class Query
             ])
             ->when(
                 (!($request->user()->type === User::TYPES[User::ADMIN]) &&
-                    !($request->user()->type === User::TYPES[User::ATTENDANCE_CHECKER])),
+                    !($request->user()->type === User::TYPES[User::FACULTY])),
                 fn($q) => $q
                     ->whereTime('time_start', '>=', Carbon::now()->toTimeString())
                     ->whereJsonContains('active_days', strtolower($dayNameNow))
