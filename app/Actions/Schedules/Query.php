@@ -33,10 +33,7 @@ class Query
                     ($request->has('rid') && $request->get('rid') === 'am'),
                     fn($rq) => $rq->where('id', $request->get('rid'))
                 )->withTrashed(),
-                'adviser' => fn($q) => $q->when(
-                    ($request->has('fid')),
-                    fn($qf) => $qf->where('id', $request->get('fid'))
-                )->withTrashed(),
+                'adviser' => fn($q) => $q->withTrashed(),
                 'subject' => fn($q) => $q->withTrashed(),
                 'semester' => fn($q) => match ($request->user()->type) {
                     User::TYPES[User::ADMIN] => $q->where('academic_year', $schoolYear)->withTrashed(),
