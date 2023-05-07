@@ -2,6 +2,7 @@
 
 namespace App\Actions\Schedules;
 
+use App\Models\Attendances;
 use App\Models\Schedules;
 use App\Models\User;
 use Carbon\Carbon;
@@ -37,7 +38,7 @@ class Query
                     User::TYPES[User::ADMIN] => $q->where('academic_year', $schoolYear)->withTrashed(),
                     default => $q->where('academic_year', $schoolYear)
                 },
-                'attendance' => fn($q) => $q->withTrashed(),
+                'attendance' => fn($q) => $q->withTrashed()->where('created_at', Carbon::now()->toDateString()),
             ])
             ->when(
                 ($request->has('q') && $request->get('q') === 'am'),
@@ -66,18 +67,29 @@ class Query
 
     private function adminQuery(string $dayNameNow, string $schoolYear)
     {
-        return Schedules::query()
-            ->join('attendances', 'schedules.id', '=', 'attendances.schedule_id')
-            ->join('semesters', 'semesters.id', '=', 'schedules.semester_id')
-            ->select([
-                DB::raw('COUNT(attendances.id) as attendances_count'),
-                'attendances.status'
+        $total_schedules = Schedules::query()->withTrashed()
+            ->with(['semester' => fn($q) => $q->where('academic_year', $schoolYear)])
+            ->whereJsonContains('active_days', strtolower($dayNameNow))
+            ->count();
+        $present = Attendances::query()
+            ->with([
+                'schedule' =>
+                fn($q) => $q->whereJsonContains('active_days', strtolower($dayNameNow))
             ])
-            ->whereJsonContains('schedules.active_days', strtolower($dayNameNow))
-            ->whereTime('schedules.time_start', '>=', Carbon::now()->toTimeString())
-            ->whereTime('schedules.time_end', '<=', Carbon::now()->toTimeString())
-            ->where('semesters.academic_year', $schoolYear)
-            ->groupBy(['attendances.status'])
-            ->get();
+            ->where('status', Attendances::STATUSES[Attendances::PRESENT])
+            ->count();
+        $absent = Attendances::query()
+            ->with([
+                'schedule' =>
+                fn($q) => $q->whereJsonContains('active_days', strtolower($dayNameNow))
+            ])
+            ->where('status', Attendances::STATUSES[Attendances::ABSENT])
+            ->count();
+        $unmarked = $total_schedules - ($present + $absent);
+        return response()->json([
+            'presents' => $present,
+            'absents' => $absent,
+            'not_visited' => $unmarked,
+        ]);
     }
 }

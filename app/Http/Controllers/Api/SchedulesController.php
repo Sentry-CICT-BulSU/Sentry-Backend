@@ -26,11 +26,10 @@ class SchedulesController extends Controller
     public function index(Request $request, Query $query): JsonResponse
     {
         $schedule = $query->handle($request);
-        $schedule = match ($request->has('admin-dash')) {
+        return match ($request->has('admin-dash')) {
             true => $schedule,
-            default => $schedule->paginate(15),
+            default => SchedulesResource::collection($schedule->paginate(15))->response(),
         };
-        return SchedulesResource::collection($schedule)->response();
     }
     public function store(
         StoreSchedulesRequest $request,
