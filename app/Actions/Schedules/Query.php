@@ -38,7 +38,10 @@ class Query
                     User::TYPES[User::ADMIN] => $q->where('academic_year', $schoolYear)->withTrashed(),
                     default => $q->where('academic_year', $schoolYear)
                 },
-                'attendances' => fn($q) => $q->where('created_at', Carbon::today()),
+                'attendances' => fn($q) => $q->whereBetween('created_at', [
+                    Carbon::now()->startOfDay()->toDateTimeString(),
+                    Carbon::now()->endOfDay()->toDateTimeString()
+                ]),
             ])
             ->when(
                 ($request->has('q') && $request->get('q') === 'am'),
