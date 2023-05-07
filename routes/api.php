@@ -63,6 +63,7 @@ Route::middleware(['auth:api'])->group(function () {
         });
         Route::controller(AdminController::class)->group(function () {
             Route::patch('reset-password', 'resetPassword')->name('reset.password');
+            Route::post('users/{user}/restore', 'restore')->name('users.restore');
             Route::resource('users', AdminController::class)->except(['create', 'edit']);
         });
 
