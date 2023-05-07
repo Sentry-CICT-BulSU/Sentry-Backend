@@ -54,7 +54,7 @@ class Query
             ->when(
                 (!($request->user()->type === User::TYPES[User::ADMIN]) &&
                     !($request->user()->type === User::TYPES[User::ATTENDANCE_CHECKER])),
-                fn($q) => $q->whereNot('adviser_id', $request->user()->id)
+                fn($q) => $q->where('adviser_id', $request->user()->id)
             )
             ->orderBy('time_start')
             ->orderBy('time_end');
