@@ -14,8 +14,6 @@ class Schedules extends Model
     protected $guarded = [];
     protected $hidden = [];
     protected $casts = [
-        // 'date_start' => 'date',
-        // 'date_end' => 'date',
         'time_start' => 'datetime:H:i',
         'time_end' => 'datetime:H:i',
         'active_days' => 'array',
@@ -31,7 +29,7 @@ class Schedules extends Model
             Carbon::now()->startOfDay()->toDateTimeString(),
             Carbon::now()->endOfDay()->toDateTimeString()
         ];
-        return $this->hasOne(Attendances::class, 'schedule_id')->whereBetween('created_at', $todayFilter)->latestOfMany();
+        return $this->hasOne(Attendances::class, 'schedule_id')->whereBetween('created_at', $todayFilter);
     }
     public function section()
     {
