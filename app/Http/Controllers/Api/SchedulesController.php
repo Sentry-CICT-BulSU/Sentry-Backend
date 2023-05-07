@@ -25,8 +25,11 @@ class SchedulesController extends Controller
 {
     public function index(Request $request, Query $query): JsonResponse
     {
-        $schedule = $query->handle($request)
-            ->paginate(15);
+        $schedule = $query->handle($request);
+        $schedule = match ($request->has('admin-dash')) {
+            true => $schedule,
+            default => $schedule->paginate(15),
+        };
         return SchedulesResource::collection($schedule)->response();
     }
     public function store(
@@ -56,7 +59,7 @@ class SchedulesController extends Controller
         });
 
         return new SchedulesResource($data->load([
-            'adviser' => fn ($q) => $q->withTrashed(),
+            'adviser' => fn($q) => $q->withTrashed(),
             'subject',
             'semester',
             'room',
