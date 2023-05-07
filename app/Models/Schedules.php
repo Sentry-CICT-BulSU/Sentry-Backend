@@ -27,7 +27,11 @@ class Schedules extends Model
     }
     public function attendances()
     {
-        return $this->hasMany(Attendances::class, 'schedule_id');
+        $todayFilter = [
+            Carbon::now()->startOfDay()->toDateTimeString(),
+            Carbon::now()->endOfDay()->toDateTimeString()
+        ];
+        return $this->hasOne(Attendances::class, 'schedule_id')->whereBetween('created_at', $todayFilter)->latestOfMany();
     }
     public function section()
     {

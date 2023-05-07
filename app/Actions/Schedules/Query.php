@@ -42,7 +42,7 @@ class Query
                     User::TYPES[User::ADMIN] => $q->where('academic_year', $schoolYear)->withTrashed(),
                     default => $q->where('academic_year', $schoolYear)
                 },
-                'attendances' => fn($q) => $q->whereBetween('created_at', $todayFilter),
+                'attendances',
             ])
             ->when(
                 ($request->has('q') && $request->get('q') === 'am'),
