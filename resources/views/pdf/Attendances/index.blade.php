@@ -53,7 +53,7 @@
 									</tr>
 								@endforeach --}}
 								@foreach ($rpts as $report)
-									<tr>
+									<tr class="{{ $loop->even ? 'alter-row' : null }}">
 										<td>{{ $report['sem_name'] }}</td>
 										<td>{{ $report['academic_year'] }}</td>
 										<td>{{ $report['first_name'] }}</td>

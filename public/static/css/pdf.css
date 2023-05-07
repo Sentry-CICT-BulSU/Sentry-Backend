@@ -1,7 +1,7 @@
  *,
  html,
  body {
-     font: 'Product Sans';
+     font: 'Helvetica', sans-serif;
  }
 
  .img_head {
@@ -141,7 +141,7 @@
  div.body_table table tbody tr td,
  .boder-override {
      border: 1px solid black;
-     font-family: 'Product Sans';
+     font-family: 'Helvetica';
  }
 
  .text-center {
@@ -149,5 +149,9 @@
  }
 
  .font {
-     font-family: 'Product Sans';
+     font-family: 'Helvetica';
+ }
+
+ .alter-row {
+     background-color: #DEDFE4;
  }
