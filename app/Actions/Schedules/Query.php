@@ -46,9 +46,10 @@ class Query
             ])
             ->when(
                 (!($request->user()->type === User::TYPES[User::ADMIN])),
-                fn($q) => $q->whereTime('time_start', '>=', Carbon::now()->toTimeString())
+                fn($q) => $q
+                    ->whereTime('time_start', '>=', Carbon::now()->toTimeString())
+                    ->whereJsonContains('active_days', strtolower($dayNameNow))
             )
-            ->whereJsonContains('active_days', strtolower($dayNameNow))
             ->orderBy('time_start')
             ->orderBy('time_end');
     }
