@@ -42,7 +42,7 @@ class Query
                     User::TYPES[User::ADMIN] => $q->where('academic_year', $schoolYear)->withTrashed(),
                     default => $q->where('academic_year', $schoolYear)
                 },
-                'attendances',
+                'attendances' => fn($q) => $q->where('created_at', '>=', Carbon::now()->toTimeString()),
             ])
             ->when(
                 (!($request->user()->type === User::TYPES[User::ADMIN])),
