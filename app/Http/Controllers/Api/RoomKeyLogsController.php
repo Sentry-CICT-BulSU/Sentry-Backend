@@ -16,9 +16,9 @@ class RoomKeyLogsController extends Controller
     {
         $keyLogs = RoomKeyLogs::query()
             ->with([
-                'roomKey.room',
-                'faculty',
-                'subject',
+                'roomKey.room' => fn($q) => $q->withTrashed(),
+                'faculty' => fn($q) => $q->withTrashed(),
+                'subject' => fn($q) => $q->withTrashed(),
             ])
             ->when(
                 ($request->has('q') && $request->get('q') === RoomKeyLogs::STATUSES[RoomKeyLogs::RETURNED]),
