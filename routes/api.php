@@ -34,14 +34,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:api'])->group(function () {
     Route::controller(UsersController::class)->group(function () {
-        Route::get('/user', fn(Request $request) => $request->user());
-        Route::patch('/user', 'update')->name('users.update');
+        Route::get('user', fn(Request $request) => $request->user());
+        Route::patch('user', 'update')->name('users.update');
     });
     Route::controller(AttendanceController::class)->group(function () {
-        Route::get('/attendances/stats', 'statistics')->name('users.stats');
-        Route::get('/attendances/user/{user}', 'attendances')->name('users.attendances');
-        Route::resource('/attendances', AttendanceController::class)->only(['index', 'show']);
-        Route::resource('/schedules.attendances', AttendanceController::class)->only(['store']);
+        Route::get('attendances/stats', 'statistics')->name('users.stats');
+        Route::get('attendances/user/{user}', 'attendances')->name('users.attendances');
+        Route::resource('attendances', AttendanceController::class)->only(['index', 'show']);
+        Route::resource('schedules.attendances', AttendanceController::class)->only(['store']);
     });
     Route::controller(RoomsController::class)->group(function () {
         Route::resource('rooms', RoomsController::class)->only(['show']);
@@ -52,14 +52,16 @@ Route::middleware(['auth:api'])->group(function () {
         Route::get('logs/available', 'availableKeys')->name('key.logs.available-keys');
         // Route::get('keys/{key}/logs', 'show')->name('key.logs.show');
     });
-    Route::resource('/schedules', SchedulesController::class)->only(['index', 'show']);
+    Route::resource('schedules', SchedulesController::class)->only(['index', 'show']);
     Route::resource('keys', RoomKeysController::class)->only(['index']);
 
     Route::prefix('admin')->name('admin.')->middleware(['admin'])->group(function () {
-        Route::get('/list', ListsController::class);
+        Route::get('list', ListsController::class);
 
         Route::controller(ReportsController::class)->group(function () {
-            Route::get('reports', [ReportsController::class, 'csv'])->name('reports');
+            Route::get('reports/csv', 'csv')->name('reports');
+            Route::get('reports/pdf', 'pdf')->name('pdf');
+            Route::get('reports/view', 'view')->name('view');
         });
         Route::controller(AdminController::class)->group(function () {
             Route::patch('reset-password', 'resetPassword')->name('reset.password');
@@ -107,7 +109,7 @@ Route::middleware(['auth:api'])->group(function () {
 
         Route::controller(AttendanceController::class)->group(function () {
             Route::post('attendances/{attendance}/restore', 'restore')->name('attendances.restore');
-            Route::resource('/attendances', AttendanceController::class)->except(['store', 'update', 'create', 'edit']);
+            Route::resource('attendances', AttendanceController::class)->except(['store', 'update', 'create', 'edit']);
         });
     });
 });

@@ -16,8 +16,6 @@ class GeneratePDF extends QueryReports
     public function handle(Request $request)
     {
         $filename = 'report_' . Str::slug(Carbon::now()->toString(), '_') . '.pdf';
-        // if (!Storage::directoryExists('fonts'))
-        //     Storage::makeDirectory('fonts');
 
         return response($this->loadPDF($request), 200)
             ->withHeaders([
