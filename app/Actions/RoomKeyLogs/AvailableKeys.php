@@ -29,9 +29,9 @@ class AvailableKeys
 
         return [
             'available' => $availableKeys,
-            'available_percentage' => $decrease,
+            'available_percentage' => number_format($decrease),
             'unavailable' => $unavailableKeys,
-            'unavailable_percentage' => $increase,
+            'unavailable_percentage' => number_format($increase),
             'total_keys' => $total,
         ];
     }

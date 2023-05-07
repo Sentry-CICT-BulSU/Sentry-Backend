@@ -22,6 +22,10 @@ class Query
     }
     private function basicQuery(Request $request, string $dayNameNow, string $schoolYear)
     {
+        $todayFilter = [
+            Carbon::now()->startOfDay()->toDateTimeString(),
+            Carbon::now()->endOfDay()->toDateTimeString()
+        ];
         return Schedules::query()
             ->with([
                 'section' => fn($q) => $q->withTrashed(),
@@ -38,10 +42,7 @@ class Query
                     User::TYPES[User::ADMIN] => $q->where('academic_year', $schoolYear)->withTrashed(),
                     default => $q->where('academic_year', $schoolYear)
                 },
-                'attendances' => fn($q) => $q->whereBetween('created_at', [
-                    Carbon::now()->startOfDay()->toDateTimeString(),
-                    Carbon::now()->endOfDay()->toDateTimeString()
-                ]),
+                'attendances' => fn($q) => $q->whereBetween('created_at', $todayFilter),
             ])
             ->when(
                 ($request->has('q') && $request->get('q') === 'am'),
@@ -74,6 +75,10 @@ class Query
 
     private function adminQuery(string $dayNameNow, string $schoolYear)
     {
+        $todayFilter = [
+            Carbon::now()->startOfDay()->toDateTimeString(),
+            Carbon::now()->endOfDay()->toDateTimeString()
+        ];
         $total_schedules = Schedules::query()->withTrashed()
             ->with(['semester' => fn($q) => $q->where('academic_year', $schoolYear)])
             ->whereJsonContains('active_days', strtolower($dayNameNow))
@@ -84,6 +89,7 @@ class Query
                 fn($q) => $q->whereJsonContains('active_days', strtolower($dayNameNow))
             ])
             ->where('status', Attendances::STATUSES[Attendances::PRESENT])
+            ->whereBetween('created_at', $todayFilter)
             ->count();
         $absent = Attendances::query()
             ->with([
@@ -91,6 +97,7 @@ class Query
                 fn($q) => $q->whereJsonContains('active_days', strtolower($dayNameNow))
             ])
             ->where('status', Attendances::STATUSES[Attendances::ABSENT])
+            ->whereBetween('created_at', $todayFilter)
             ->count();
         $unmarked = $total_schedules - ($present + $absent);
         return response()->json([

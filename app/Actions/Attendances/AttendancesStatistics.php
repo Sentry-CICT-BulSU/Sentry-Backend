@@ -2,6 +2,7 @@
 
 namespace App\Actions\Attendances;
 
+use App\Models\Attendances;
 use App\Models\Schedules;
 use App\Models\User;
 use Carbon\Carbon;
@@ -13,25 +14,35 @@ class AttendancesStatistics
     {
         $schoolYear = Carbon::now()->year . '-' . Carbon::now()->addYear()->year;
         $dayNameNow = Carbon::now()->dayName;
-        $scheduleQuery = Schedules::query()
-            ->with([
-                'adviser' => fn($q) => $q->withTrashed(),
-                'semester' => fn($q) => match (Auth::user()->type) {
-                    User::ADMIN => $q->where('academic_year', $schoolYear)->withTrashed(),
-                    default => $q->where('academic_year', $schoolYear)
-                },
-                'attendance' => fn($q) => $q->withTrashed(),
-            ])
+        $todayFilter = [
+            Carbon::now()->startOfDay()->toDateTimeString(),
+            Carbon::now()->endOfDay()->toDateTimeString()
+        ];
+        $total_schedules = Schedules::query()->withTrashed()
+            ->with(['semester' => fn($q) => $q->where('academic_year', $schoolYear)])
             ->whereJsonContains('active_days', strtolower($dayNameNow))
-            ->orderBy('time_start')
-            ->orderBy('time_end')
-            ->get();
-
-        $total = $scheduleQuery->count();
-        $monitored = $scheduleQuery->pluck('attendance')->count();
-
+            ->count();
+        $present = Attendances::query()
+            ->with([
+                'schedule' =>
+                fn($q) => $q->whereJsonContains('active_days', strtolower($dayNameNow))
+            ])
+            ->where('status', Attendances::STATUSES[Attendances::PRESENT])
+            ->whereBetween('created_at', $todayFilter)
+            ->count();
+        $absent = Attendances::query()
+            ->with([
+                'schedule' =>
+                fn($q) => $q->whereJsonContains('active_days', strtolower($dayNameNow))
+            ])
+            ->where('status', Attendances::STATUSES[Attendances::ABSENT])
+            ->whereBetween('created_at', $todayFilter)
+            ->count();
+        // dd($present, $absent, $total_schedules);
+        $monitored = $absent + $present;
+        $unmarked = $total_schedules - $monitored;
         // return ['schedules_count' => $total, 'attendances' => $monitored];
-        if ($total === 0) {
+        if ($total_schedules === 0) {
             return [
                 'availabe' => 0,
                 'availabe_percentage' => 0,
@@ -40,16 +51,15 @@ class AttendancesStatistics
                 'total_keys' => 0,
             ];
         }
-        $unmonitored = $total - $monitored;
-        $decrease = (($total - $unmonitored) / $total) * 100;
-        $increase = ($unmonitored / $total) * 100;
+        $decrease = (($total_schedules - $unmarked) / $total_schedules) * 100;
+        $increase = ($unmarked / $total_schedules) * 100;
 
         return [
             'monitored' => $monitored,
-            'monitored_percentage' => $decrease,
-            'unmonitored' => $unmonitored,
-            'unmonitored_percentage' => $increase,
-            'total_attendance' => $total,
+            'monitored_percentage' => number_format($decrease),
+            'unmonitored' => $unmarked,
+            'unmonitored_percentage' => number_format($increase),
+            'total_attendance' => $total_schedules,
         ];
     }
 }
