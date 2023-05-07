@@ -46,10 +46,15 @@ class Query
             ])
             ->when(
                 (!($request->user()->type === User::TYPES[User::ADMIN]) &&
-                    !($request->user()->type === User::TYPES[User::FACULTY])),
+                    !($request->user()->type === User::TYPES[User::ATTENDANCE_CHECKER])),
                 fn($q) => $q
                     ->whereTime('time_start', '>=', Carbon::now()->toTimeString())
                     ->whereJsonContains('active_days', strtolower($dayNameNow))
+            )
+            ->when(
+                (!($request->user()->type === User::TYPES[User::ADMIN]) &&
+                    !($request->user()->type === User::TYPES[User::ATTENDANCE_CHECKER])),
+                fn($q) => $q->whereNot('adviser_id', $request->user()->id)
             )
             ->orderBy('time_start')
             ->orderBy('time_end');
