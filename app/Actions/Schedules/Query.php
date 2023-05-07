@@ -47,28 +47,28 @@ class Query
             ->when(
                 ($request->has('q') && $request->get('q') === 'am'),
                 fn($q) => $q
-                    ->whereBetween('time_start', [Carbon::parse('00:00:00')->toTimeString(), Carbon::parse('11:59:59')->toTimeString()])
+                    ->whereBetween('time_start', [Carbon::parse('00:00:00'), Carbon::parse('11:59:59')])
                     // ->orWhereBetween('time_end', [Carbon::parse('00:00:00')->toTimeString(), Carbon::parse('11:59:59')->toTimeString()])
                     // ->whereTime('time_start', '>=', Carbon::parse('00:00:00')->toTimeString())
                     // ->orWhereTime('time_end', '<=', Carbon::parse('11:59:59')->toTimeString())
-                    ->whereJsonContains('active_days', strtolower($dayNameNow))
+                    // ->whereJsonContains('active_days', strtolower($dayNameNow))
             )
             ->when(
                 ($request->has('q') && $request->get('q') === 'pm'),
                 fn($q) => $q
-                    ->whereBetween('time_start', [Carbon::parse('12:00:00')->toTimeString(), Carbon::parse('23:59:59')->toTimeString()])
+                    ->whereBetween('time_start', [Carbon::parse('12:00:00'), Carbon::parse('23:59:59')])
                     // ->orWhereBetween('time_end', [Carbon::parse('12:00:00')->toTimeString(), Carbon::parse('23:59:59')->toTimeString()])
                     // ->whereTime('time_start', '>=', Carbon::parse('12:00:00')->toTimeString())
                     // ->orWhereTime('time_end', '<=', Carbon::parse('23:59:59')->toTimeString())
-                    ->whereJsonContains('active_days', strtolower($dayNameNow))
+                    // ->whereJsonContains('active_days', strtolower($dayNameNow))
             )
             ->when(
                 (!$request->has('q') && !($request->user()->type === User::TYPES[User::ADMIN])),
                 fn($q) => $q
-                    ->whereJsonContains('active_days', strtolower($dayNameNow))
                     ->orWhereTime('time_start', '>=', Carbon::now()->toTimeString())
                     ->orWhereTime('time_end', '<=', Carbon::now()->toTimeString())
             )
+            ->whereJsonContains('active_days', strtolower($dayNameNow))
             ->orderBy('time_start')
             ->orderBy('time_end');
     }
