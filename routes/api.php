@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\{
     RoomKeysController,
     RoomsController,
 };
+use App\Http\Controllers\Api\ChartsController;
 use App\Http\Controllers\Api\ReportsController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Http\Request;
@@ -43,6 +44,9 @@ Route::middleware(['auth:api'])->group(function () {
         Route::get('user', fn(Request $request) => $request->user());
         // Route::resource('user', UsersController::class)->only('update');
         Route::post('user', 'update');
+    });
+    Route::controller(ChartsController::class)->group(function () {
+        Route::resource('charts', ChartsController::class)->only('index');
     });
     Route::controller(AttendanceController::class)->group(function () {
         Route::get('attendances/stats', 'statistics')->name('users.stats');
