@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Actions\Charts\AdminChart;
+use App\Actions\Charts\FacultyChart;
 use App\Http\Controllers\Controller;
 use App\Models\Attendances;
 use App\Models\User;
@@ -14,13 +15,13 @@ use Illuminate\Support\Facades\DB;
 
 class ChartsController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
         return match ($request->user()->type) {
             USER::TYPES[User::ADMIN] => self::admin($request),
             USER::TYPES[User::ATTENDANCE_CHECKER] => self::attendance($request),
             USER::TYPES[User::FACULTY] => self::faculty($request),
-            default => ''
+            default => response()->json(['message' => 'User not found'], 404)
         };
     }
     private static function admin(Request $request): JsonResponse
@@ -33,6 +34,9 @@ class ChartsController extends Controller
     }
     private static function faculty(Request $request)
     {
-
+        $user_id = $request->user()->id;
+        return $user_id
+            ? FacultyChart::getChart($request->user()->id)
+            : response()->json(['message' => 'User not found'], 404);
     }
 }
