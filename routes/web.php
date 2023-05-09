@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Api\ChartsController;
 use App\Http\Controllers\Api\ReportsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UsersController;
@@ -25,9 +24,6 @@ Route::middleware(['auth' /* , 'verified' */])->group(function () {
         'to Time string' => now()->toTimeString(),
         'to DateTime string' => now()->toDateTimeString(),
     ]);
-    Route::controller(ChartsController::class)->group(function () {
-        Route::resource('charts', ChartsController::class)->only('index');
-    });
     Route::controller(UsersController::class)->group(function () {
         // Route::get('user', fn(Request $request) => $request->user());
         // Route::post('user', 'update');
