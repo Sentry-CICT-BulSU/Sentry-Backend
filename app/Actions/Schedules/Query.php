@@ -44,9 +44,7 @@ class Query
             ->when(
                 (!($request->user()->type === User::TYPES[User::ADMIN]) &&
                     !($request->user()->type === User::TYPES[User::FACULTY])),
-                fn($q) => $q
-                    ->whereTime('time_start', '>=', Carbon::now()->toTimeString())
-                    ->whereJsonContains('active_days', strtolower($dayNameNow))
+                fn($q) => $q->whereJsonContains('active_days', strtolower($dayNameNow))
             )
             ->when(
                 (!($request->user()->type === User::TYPES[User::ADMIN]) &&
@@ -65,16 +63,11 @@ class Query
         ];
         $total_schedules = Schedules::query()->withTrashed()
             ->join('semesters', 'semesters.id', '=', 'schedules.semester_id')
-            // ->with(['semester' => fn($q) => $q->where('academic_year', $schoolYear)])
             ->where('semesters.academic_year', $schoolYear)
             ->whereJsonContains('schedules.active_days', strtolower($dayNameNow))
             ->count();
         $present = Attendances::query()
             ->join('schedules', 'schedules.id', '=', 'attendances.schedule_id')
-            // ->with([
-            //     'schedule' =>
-            //     fn($q) => $q->whereJsonContains('active_days', strtolower($dayNameNow))
-            // ])
             ->select('attendances.*')
             ->whereJsonContains('schedules.active_days', strtolower($dayNameNow))
             ->where('attendances.status', Attendances::STATUSES[Attendances::PRESENT])
@@ -82,10 +75,6 @@ class Query
             ->count();
         $absent = Attendances::query()
             ->join('schedules', 'schedules.id', '=', 'attendances.schedule_id')
-            // ->with([
-            //     'schedule' =>
-            //     fn($q) => $q->whereJsonContains('active_days', strtolower($dayNameNow))
-            // ])
             ->select('attendances.*')
             ->whereJsonContains('schedules.active_days', strtolower($dayNameNow))
             ->where('attendances.status', Attendances::STATUSES[Attendances::ABSENT])
