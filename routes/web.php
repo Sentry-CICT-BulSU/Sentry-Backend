@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::middleware(['auth' /* , 'verified' */])->group(function () {
+    Route::get('time-now', fn() => now());
     Route::controller(UsersController::class)->group(function () {
         // Route::get('user', fn(Request $request) => $request->user());
         // Route::post('user', 'update');

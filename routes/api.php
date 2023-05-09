@@ -31,7 +31,7 @@ use Illuminate\Support\Facades\Route;
 // header('Access-Control-Allow-Origin: *');
 // header('Access-Control-Allow-Methods: *');
 // header('Access-Control-Allow-Headers: *');
-
+Route::get('time-now', fn() => now());
 Route::middleware(['auth:api'])->group(function () {
     Route::controller(UsersController::class)->group(function () {
         Route::get('user', fn(Request $request) => $request->user());
