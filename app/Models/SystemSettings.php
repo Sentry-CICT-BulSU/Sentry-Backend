@@ -15,4 +15,9 @@ class SystemSettings extends Model
     protected $guarded = [];
     protected $hidden = [];
     protected $casts = [];
+
+    public function getIconAttribute($icon)
+    {
+        return $icon ? asset($icon) : null;
+    }
 }

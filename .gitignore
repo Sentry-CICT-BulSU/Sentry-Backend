@@ -23,4 +23,5 @@ yarn-error.log
 
 public/profile_imgs
 public/attachments
+public/sys_settings
 .gitconfig

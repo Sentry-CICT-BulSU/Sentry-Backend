@@ -5,6 +5,7 @@ namespace App\Actions\Charts;
 use App\Models\Attendances;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -33,23 +34,33 @@ class FacultyChart
         $absentees_filtered = [];
 
         foreach ($dates as $k => $date) {
-            if (empty($absentees)) {
-                $absentees_filtered[$k]['x'] = $date;
-                $absentees_filtered[$k]['y'] = 0;
-            } else {
-                foreach ($absentees as $kk => $v) {
-                    $absentees_filtered[$k]['x'] = $date;
-                    $absentees_filtered[$k]['y'] = $absentees[$kk]['date_time'] === $date ? $absentees[$kk]['count'] : 0;
-                }
-            }
-            if (empty($presentees)) {
-                $presentees_filtered[$k]['x'] = $date;
+            $presentees_filtered[$k]['x'] = $date;
+            $absentees_filtered[$k]['x'] = $date;
+
+            $presentFlat = array_map(
+                fn($q) => $q['count'],
+                array_filter(
+                    $presentees,
+                    fn($q) => $q['date_time'] === $date,
+                )
+            );
+            if (empty($presentFlat)) {
                 $presentees_filtered[$k]['y'] = 0;
             } else {
-                foreach ($presentees as $kk => $v) {
-                    $presentees_filtered[$k]['x'] = $date;
-                    $presentees_filtered[$k]['y'] = $presentees[$kk]['date_time'] == $date ? $presentees[$kk]['count'] : 0;
-                }
+                $presentees_filtered[$k]['y'] = Arr::first($presentFlat);
+            }
+
+            $absentFlat = array_map(
+                fn($q) => $q['count'],
+                array_filter(
+                    $absentees,
+                    fn($q) => $q['date_time'] === $date,
+                )
+            );
+            if (empty($absentFlat)) {
+                $absentees_filtered[$k]['y'] = 0;
+            } else {
+                $absentees_filtered[$k]['y'] = Arr::first($absentFlat);
             }
         }
 
