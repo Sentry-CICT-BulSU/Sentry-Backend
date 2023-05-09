@@ -35,7 +35,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['auth:api'])->group(function () {
     Route::controller(UsersController::class)->group(function () {
         Route::get('user', fn(Request $request) => $request->user());
-        Route::patch('user', 'update')->name('users.update');
+        // Route::resource('user', UsersController::class)->only('update');
+        Route::post('user', 'update');
     });
     Route::controller(AttendanceController::class)->group(function () {
         Route::get('attendances/stats', 'statistics')->name('users.stats');

@@ -24,7 +24,7 @@ class UpdateUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'profile_img' => ['nullable', 'bail', 'image', 'mimes:png,jpg,jpeg,gif'],
+            'profile_img' => ['nullable', 'bail', 'image'],
             'first_name' => ['nullable', 'bail', 'string', 'max:255'],
             'last_name' => ['nullable', 'bail', 'string', 'max:255'],
             'email' => ['nullable', 'bail', 'string', 'email', 'unique:users,email', 'max:255'],
