@@ -40,13 +40,13 @@ Route::get('time-now', fn() => [
     'to Time string' => now()->toTimeString(),
     'to DateTime string' => now()->toDateTimeString(),
 ]);
+Route::resource('system-settings', SystemSettingsController::class)->only(['index', 'store']);
 Route::middleware(['auth:api'])->group(function () {
     Route::controller(UsersController::class)->group(function () {
         Route::get('user', fn(Request $request) => $request->user());
         // Route::resource('user', UsersController::class)->only('update');
         Route::post('user', 'update');
     });
-    Route::resource('system-settings', SystemSettingsController::class)->only(['index', 'store']);
     Route::controller(ChartsController::class)->group(function () {
         Route::resource('charts', ChartsController::class)->only('index');
     });
