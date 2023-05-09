@@ -29,7 +29,7 @@ class ChartsController extends Controller
     }
     private static function attendance(Request $request)
     {
-
+        return AdminChart::getChart();
     }
     private static function faculty(Request $request)
     {
