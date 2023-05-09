@@ -27,13 +27,21 @@ class StoreRoomsRequest extends FormRequest
                 'required',
                 'string',
                 'max:255',
-                Rule::unique('rooms', 'name')->withoutTrashed()
+                Rule::unique('rooms')->where(
+                    fn($q) => $q->where(
+                        [['name', $this->name], ['location', $this->location]]
+                    )
+                )->withoutTrashed()
             ],
             'location' => [
                 'required',
                 'string',
                 'max:255',
-                Rule::unique('rooms', 'location')->withoutTrashed()
+                Rule::unique('rooms')->where(
+                    fn($q) => $q->where(
+                        [['name', $this->name], ['location', $this->location]]
+                    )
+                )->withoutTrashed()
             ],
             'status' => ['required', 'string', 'max:255'],
         ];
