@@ -32,4 +32,9 @@ class Attendances extends Model
     {
         return $this->belongsTo(Schedules::class, 'schedule_id');
     }
+
+    public function getAttachmentAttribute($attachment)
+    {
+        return $attachment ? asset($attachment) : null;
+    }
 }

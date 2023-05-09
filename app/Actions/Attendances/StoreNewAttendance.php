@@ -12,6 +12,13 @@ class StoreNewAttendance
     {
         $data = $request->validated();
         $data['schedule_id'] = $schedule->id;
+        if ($request->file('attachment')) {
+            $fileName = $request->file('attachment')->storePublicly('attachments');
+            if (!$fileName) {
+                throw new \Exception('Failed to upload attachment', 500);
+            }
+            $data['attachment'] = $fileName;
+        }
         return Attendances::create($data);
     }
 }

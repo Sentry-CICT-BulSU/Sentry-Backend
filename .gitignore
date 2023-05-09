@@ -22,4 +22,5 @@ yarn-error.log
 /.vscode
 
 public/profile_imgs
+public/attachments
 .gitconfig

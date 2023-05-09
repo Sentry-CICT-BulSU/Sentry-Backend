@@ -10,9 +10,6 @@ class UpdateUser
     public function handle(Request $request, User $user): bool|User
     {
         $data = $request->validated();
-        // dump($request->toArray());
-        // dump($request->file());
-        // dd($request->all());
         if ($request->file('profile_img')) {
             $fileName = $request->file('profile_img')->storePublicly('profile_imgs');
             if (!$fileName) {
