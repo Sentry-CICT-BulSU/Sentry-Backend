@@ -3,17 +3,18 @@
 use App\Http\Controllers\Api\{
     AdminController,
     AttendanceController,
+    ChartsController,
     ListsController,
     SchedulesController,
     SectionsController,
     SemestersController,
     SubjectsController,
+    ReportsController,
     RoomKeyLogsController,
     RoomKeysController,
     RoomsController,
+    SystemSettingsController
 };
-use App\Http\Controllers\Api\ChartsController;
-use App\Http\Controllers\Api\ReportsController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -45,6 +46,7 @@ Route::middleware(['auth:api'])->group(function () {
         // Route::resource('user', UsersController::class)->only('update');
         Route::post('user', 'update');
     });
+    Route::resource('system-settings', SystemSettingsController::class)->only(['index', 'store']);
     Route::controller(ChartsController::class)->group(function () {
         Route::resource('charts', ChartsController::class)->only('index');
     });

@@ -36,7 +36,7 @@ class AdminChart
             } else {
                 foreach ($absentees as $kk => $v) {
                     $absentees_filtered[$k]['x'] = $date;
-                    $absentees_filtered[$k]['y'] = $absentees[$kk]['date_time'] === $date ? $absentees[$kk]['count'] : 0;
+                    $absentees_filtered[$k]['y'] = $absentees[$kk]['date_time'] == $date ? $absentees[$kk]['count'] : 0;
                 }
             }
             if (empty($presentees)) {
