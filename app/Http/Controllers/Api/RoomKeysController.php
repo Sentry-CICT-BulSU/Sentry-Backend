@@ -42,17 +42,17 @@ class RoomKeysController extends Controller
     public function show(RoomKeys $key): RoomKeysResource
     {
         $key->load([
-            'room',
-            'schedules.section',
-            'schedules.adviser',
-            'schedules.subject',
-            'schedules.semester',
-            'schedules' => fn($q) => $q->orderBy('time_start') //->select('time_start', 'time_end')
+            'room' => fn($q) => $q->withTrashed(),
+            'schedules.section' => fn($q) => $q->withTrashed(),
+            'schedules.adviser' => fn($q) => $q->withTrashed(),
+            'schedules.subject' => fn($q) => $q->withTrashed(),
+            'schedules.semester' => fn($q) => $q->withTrashed(),
+            'schedules' => fn($q) => $q->withTrashed()->orderBy('time_start') //->select('time_start', 'time_end')
                 ->where('time_start', '>=', now()->toTimeString())->first(),
             'logs.faculty' => fn($q) => $q->withTrashed(),
-            'logs.roomKey.room',
-            'logs.subject',
-            'logs' => fn($q) => $q->limit(20)
+            'logs.roomKey.room' => fn($q) => $q->withTrashed(),
+            'logs.subject' => fn($q) => $q->withTrashed(),
+            'logs' => fn($q) => $q->withTrashed()->limit(20)
         ]);
         return new RoomKeysResource($key);
     }
