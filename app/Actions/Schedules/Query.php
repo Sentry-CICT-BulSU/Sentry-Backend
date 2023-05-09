@@ -22,35 +22,49 @@ class Query
     }
     private function basicQuery(Request $request, string $dayNameNow, string $schoolYear)
     {
-        $todayFilter = [
-            Carbon::now()->startOfDay()->toDateTimeString(),
-            Carbon::now()->endOfDay()->toDateTimeString()
-        ];
         return Schedules::query()
             ->with([
                 'section' => fn($q) => $q->withTrashed(),
-                'room' => fn($q) => $q->when(
-                    ($request->has('rid') && $request->get('rid') === 'am'),
-                    fn($rq) => $rq->where('id', $request->get('rid'))
-                )->withTrashed(),
-                'adviser' => fn($q) => $q->withTrashed(),
-                'subject' => fn($q) => $q->withTrashed(),
+                'room' => fn($q) => (match ($request->user()->type) {
+                    User::TYPES[User::ADMIN] => $q->withTrashed(),
+                default => $q
+            })->when(
+                        ($request->has('rid') && $request->get('rid') === 'am'),
+                        fn($rq) => $rq->where('id', $request->get('rid'))
+                    ),
+                'adviser' => fn($q) => match ($request->user()->type) {
+                    User::TYPES[User::ADMIN] => $q->withTrashed(),
+                    default => $q
+                },
+                'subject' => fn($q) => match ($request->user()->type) {
+                    User::TYPES[User::ADMIN] => $q->withTrashed(),
+                    default => $q
+                },
                 'semester' => fn($q) => match ($request->user()->type) {
                     User::TYPES[User::ADMIN] => $q->where('academic_year', $schoolYear)->withTrashed(),
                     default => $q->where('academic_year', $schoolYear)
                 },
                 'attendances',
             ])
+            // when auth user is attendance checker
             ->when(
                 (!($request->user()->type === User::TYPES[User::ADMIN]) &&
                     !($request->user()->type === User::TYPES[User::FACULTY])),
                 fn($q) => $q->whereJsonContains('active_days', strtolower($dayNameNow))
+                    ->whereNot('adviser_id', $request->user()->id)
+                    ->has('adviser')
+                    ->has('subject')
+                    ->has('semester')
+                    ->has('section')
+                    ->has('room')
             )
+            // when auth user is faculllty
             ->when(
                 (!($request->user()->type === User::TYPES[User::ADMIN]) &&
                     !($request->user()->type === User::TYPES[User::ATTENDANCE_CHECKER])),
                 fn($q) => $q->where('adviser_id', $request->user()->id)
             )
+
             ->orderBy('time_start')
             ->orderBy('time_end');
     }
