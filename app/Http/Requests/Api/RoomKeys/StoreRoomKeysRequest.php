@@ -23,9 +23,10 @@ class StoreRoomKeysRequest extends FormRequest
     {
         return [
             'room_key_id' => ['required', 'exists:room_keys,id'],
-            'faculty_id' => ['required', 'exists:users,id'],
-            'subject_id' => ['required', 'exists:subjects,id'],
+            'faculty_id' => ['nullable', 'bail', 'exists:users,id'],
+            'subject_id' => ['nullable', 'bail', 'exists:subjects,id'],
             'time_block' => ['required', 'string'],
+            'is_null' => ['nullable', 'bail', 'boolean'],
         ];
     }
 }

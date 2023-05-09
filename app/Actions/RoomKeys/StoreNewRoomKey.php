@@ -11,7 +11,7 @@ class StoreNewRoomKey
     public function handle(StoreRoomKeysRequest $request)
     {
         $data = $request->validated();
-        $key = RoomKeys::find($data['room_key_id']);
+        $key = RoomKeys::findOrFail($data['room_key_id']);
         $currentStatus = RoomKeyLogs::where('room_key_id', $data['room_key_id'])->latest()->first();
 
         if (!$key) {
