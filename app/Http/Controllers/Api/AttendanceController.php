@@ -29,18 +29,20 @@ class AttendanceController extends Controller
         $dayNameNow = Carbon::now()->dayName;
         $attendances = Schedules::query()
             ->with([
-                'adviser' => fn($q) => $q->when(
-                    ($request->has('fid')),
-                    fn($qf) => $qf->where('id', $request->get('id'))
-                )->withTrashed(),
-                'semester' => fn($q) => match (Auth::user()->type) {
-                    User::ADMIN => $q->where('academic_year', $schoolYear)->withTrashed(),
+                'adviser' => fn($q) => $q,
+                'semester' => fn($q) => match ($request->user()->type) {
+                    User::ADMIN => $q->where('academic_year', $schoolYear),
                     default => $q->where('academic_year', $schoolYear)
                 },
-                'attendance.user' => fn($q) => $q->withTrashed(),
-                'room' => fn($q) => $q->withTrashed(),
-                'subject' => fn($q) => $q->withTrashed(),
+                'attendance.user' => fn($q) => $q,
+                'room' => fn($q) => $q,
+                'subject' => fn($q) => $q,
             ])
+            ->has('section')
+            ->when(
+                ($request->has('fid')),
+                fn($qf) => $qf->where('id', $request->get('id'))
+            )
             ->when(
                 (!$request->has('no-filter')),
                 fn($q) => $q->whereJsonContains('active_days', strtolower($dayNameNow))

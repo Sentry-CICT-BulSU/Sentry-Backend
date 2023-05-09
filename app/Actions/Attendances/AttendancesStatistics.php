@@ -18,33 +18,33 @@ class AttendancesStatistics
             Carbon::now()->startOfDay()->toDateTimeString(),
             Carbon::now()->endOfDay()->toDateTimeString()
         ];
-        $total_schedules = Schedules::query()->withTrashed()
+        $total_schedules = Schedules::query()
             ->join('semesters', 'semesters.id', '=', 'schedules.semester_id')
-            // ->with(['semester' => fn($q) => $q->where('academic_year', $schoolYear)])
             ->where('semesters.academic_year', $schoolYear)
             ->whereJsonContains('schedules.active_days', strtolower($dayNameNow))
+            ->has('adviser')
+            ->has('subject')
+            ->has('semester')
+            ->has('section')
+            ->has('room')
             ->count();
         $present = Attendances::query()
             ->join('schedules', 'schedules.id', '=', 'attendances.schedule_id')
-            // ->with([
-            //     'schedule' =>
-            //     fn($q) => $q->whereJsonContains('active_days', strtolower($dayNameNow))
-            // ])
             ->select('attendances.*')
             ->whereJsonContains('schedules.active_days', strtolower($dayNameNow))
             ->where('attendances.status', Attendances::STATUSES[Attendances::PRESENT])
             ->whereBetween('attendances.created_at', $todayFilter)
+            ->has('user')
+            ->has('schedule')
             ->count();
         $absent = Attendances::query()
             ->join('schedules', 'schedules.id', '=', 'attendances.schedule_id')
-            // ->with([
-            //     'schedule' =>
-            //     fn($q) => $q->whereJsonContains('active_days', strtolower($dayNameNow))
-            // ])
             ->select('attendances.*')
             ->whereJsonContains('schedules.active_days', strtolower($dayNameNow))
             ->where('attendances.status', Attendances::STATUSES[Attendances::ABSENT])
             ->whereBetween('attendances.created_at', $todayFilter)
+            ->has('user')
+            ->has('schedule')
             ->count();
         // dd($present, $absent, $total_schedules);
         $monitored = $absent + $present;
@@ -65,7 +65,7 @@ class AttendancesStatistics
         return [
             'monitored' => $monitored,
             'monitored_percentage' => number_format($decrease),
-            'unmonitored' => $unmarked,
+            'unmonitored' => $unmarked < 0 ? 0 : $unmarked,
             'unmonitored_percentage' => number_format($increase),
             'total_attendance' => $total_schedules,
         ];
