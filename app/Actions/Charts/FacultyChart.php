@@ -14,10 +14,10 @@ class FacultyChart
     private static function query(array $datePeriod, int $user_id)
     {
         return Attendances::query()
+            ->where('user_id', $user_id)
             ->select(DB::raw('DATE(created_at) as x'), DB::raw('count(*) as y'))
             ->groupBy('x')
-            ->whereBetween('created_at', $datePeriod)
-            ->where('user_id', $user_id);
+            ->whereBetween('created_at', $datePeriod);
     }
     public static function getChart(int $user_id): JsonResponse
     {
