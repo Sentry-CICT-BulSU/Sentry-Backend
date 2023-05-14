@@ -28,17 +28,11 @@ class AdminChart
 
         $presentees = self::query($datePeriod)
             ->where('status', Attendances::STATUSES[Attendances::PRESENT])
-            ->get()->map(function ($e) {
-                $e->x = Carbon::parse($e->x)->toFormattedDayDateString();
-                return $e;
-            });
+            ->get();
 
         $absentees = self::query($datePeriod)
             ->where('status', Attendances::STATUSES[Attendances::ABSENT])
-            ->get()->map(function ($e) {
-                $e->x = Carbon::parse($e->x)->toFormattedDayDateString();
-                return $e;
-            });
+            ->get();
 
         $present_array = $dates->map(function ($e) use ($presentees) {
             $date = Carbon::parse($e)->format('D, M d');
