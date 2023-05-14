@@ -34,9 +34,6 @@ class ChartsController extends Controller
     }
     private static function faculty(Request $request)
     {
-        $user_id = $request->user()->id;
-        return $user_id
-            ? FacultyChart::getChart($request->user()->id)
-            : response()->json(['message' => 'User not found'], 404);
+        return FacultyChart::getChart($request->user()->id);
     }
 }
