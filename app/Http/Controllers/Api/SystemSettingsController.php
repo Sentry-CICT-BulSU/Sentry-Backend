@@ -18,7 +18,7 @@ class SystemSettingsController extends Controller
     {
         $data = $request->validate([
             'name' => ['nullable', 'bail', 'string', 'max:255'],
-            'about' => ['nullable', 'bail', 'string', 'max:255'],
+            'about' => ['nullable', 'bail', 'string', 'max:1000'],
             'icon' => ['nullable', 'bail', 'image'],
             'color' => ['nullable', 'bail', 'string', 'max:255']
         ]);
