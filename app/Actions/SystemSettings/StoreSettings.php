@@ -9,6 +9,13 @@ class StoreSettings
 {
     public static function handle(Request $request)
     {
+        $data = $request->validate([
+            'name' => ['nullable', 'bail', 'string', 'max:255'],
+            'about' => ['nullable', 'bail', 'string', 'max:1000'],
+            'icon' => ['nullable', 'bail', 'image'],
+            'color' => ['nullable', 'bail', 'string', 'max:255']
+        ]);
+
         if ($request->file('icon')) {
             $fileName = $request->file('icon')->storePublicly('sys_settings');
             if (!$fileName) {
@@ -21,6 +28,7 @@ class StoreSettings
             return SystemSettings::create($data);
         }
         $sys_settings->update($data);
+
         return $sys_settings;
     }
 }
