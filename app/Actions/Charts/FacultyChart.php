@@ -22,8 +22,8 @@ class FacultyChart
     public static function getChart(int $user_id): JsonResponse
     {
         $datePeriod = [
-            Carbon::now()->subDays(7)->toDateString(),
-            Carbon::now()->toDateString(),
+            Carbon::now()->subDays(7),
+            Carbon::now(),
         ];
         $dates = collect(CarbonPeriod::createFromArray($datePeriod)->map(fn($q) => $q->format('Y-m-d')));
 
