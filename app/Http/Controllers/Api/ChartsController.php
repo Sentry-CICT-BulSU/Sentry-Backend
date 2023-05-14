@@ -28,11 +28,11 @@ class ChartsController extends Controller
     {
         return AdminChart::getChart();
     }
-    private static function attendance(Request $request)
+    private static function attendance(Request $request): JsonResponse
     {
         return AdminChart::getChart();
     }
-    private static function faculty(Request $request)
+    private static function faculty(Request $request): JsonResponse
     {
         return FacultyChart::getChart($request->user()->id);
     }
