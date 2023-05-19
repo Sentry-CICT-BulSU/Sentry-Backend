@@ -75,8 +75,9 @@ class Query
             Carbon::now()->endOfDay()->toDateTimeString()
         ];
         $total_schedules = Schedules::query()
-            ->join('semesters', 'semesters.id', '=', 'schedules.semester_id')
-            ->where('semesters.academic_year', $schoolYear)
+            ->with([
+                'semester' => fn($q) => $q->where('academic_year', $schoolYear)
+            ])
             ->whereJsonContains('schedules.active_days', strtolower($dayNameNow))
             ->has('adviser')
             ->has('subject')
